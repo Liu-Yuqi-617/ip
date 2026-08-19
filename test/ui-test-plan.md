@@ -63,15 +63,15 @@ java -cp out Victoria --test
 ### Expected output
 
 ```text
- OOPS!!! The description of this task cannot be empty.
+ Oops! The description of this task cannot be empty.
 ____________________________________________________________
- OOPS!!! The deadline is missing /by <date/time>.
+ Oops! The deadline is missing /by <date/time>.
 ____________________________________________________________
- OOPS!!! The description of this task cannot be empty.
+ Oops! The description of this task cannot be empty.
 ____________________________________________________________
- OOPS!!! The event is missing /to <end>.
+ Oops! The event is missing /to <end>.
 ____________________________________________________________
- OOPS!!! The event start time after /from cannot be empty.
+ Oops! The event start time after /from cannot be empty.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
@@ -178,9 +178,9 @@ java -cp out Victoria --test
 ### Expected output
 
 ```text
- OOPS!!! Oops! I don't recognize that command. Try a standard command format.
+ Oops! I don't recognize that command. Try a standard command format.
 ____________________________________________________________
- OOPS!!! Oops! I don't recognize that command. Try a standard command format.
+ Oops! I don't recognize that command. Try a standard command format.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
@@ -243,7 +243,7 @@ java -cp out Victoria --test
 ### Expected output
 
 ```text
- OOPS!!! Oops! I don't recognize that command. Try a standard command format.
+ Oops! I don't recognize that command. Try a standard command format.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
@@ -272,9 +272,9 @@ java -cp out Victoria --test
 ### Expected output
 
 ```text
- OOPS!!! The description of a task cannot be empty.
+ Oops! The description of a task cannot be empty.
 ____________________________________________________________
- OOPS!!! Oops! I don't recognize that command. Try a standard command format.
+ Oops! I don't recognize that command. Try a standard command format.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________

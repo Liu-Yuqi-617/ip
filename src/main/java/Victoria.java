@@ -14,16 +14,15 @@ public class Victoria {
                 + "╚██╗ ██╔╝██║██║        ██║   ██║   ██║██╔══██╗██║██╔══██║\n"
                 + " ╚████╔╝ ██║╚██████╗   ██║   ╚██████╔╝██║  ██║██║██║  ██║\n"
                 + "  ╚═══╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝\n";
-        String greeting = "Hi! I'm Victoria!";
         String prompt = "Anything new today? I'm all ears!";
         String farewell = "Bye! Always nice to chat with you. See you soon!";
 
         if (args.length == 0) {
             printBootSequence(banner);
             System.out.println(HORIZONTAL_LINE);
-            printAnimatedLine("[ VICTORIA TASK SYSTEM ]", 12);
-            printAnimatedLine("> Welcome back, task champion.", 12);
-            printAnimatedLine("> Your next achievement is waiting.", 12);
+            printAnimatedLine("[ VICTORIA TASK SYSTEM ]", 6);
+            printAnimatedLine("> Welcome back, task champion.", 6);
+            printAnimatedLine("> Your next achievement is waiting.", 6);
             System.out.println(HORIZONTAL_LINE);
             System.out.println(prompt);
             System.out.println(HORIZONTAL_LINE);
@@ -37,17 +36,18 @@ public class Victoria {
 
     /** Prints the cyber-style startup sequence before the command prompt. */
     private static void printBootSequence(String banner) {
-        printAnimatedLine("> Initializing VICTORIA...", 18);
-        printAnimatedLine("> Loading task memory...", 18);
-        printAnimatedLine("> Status: ONLINE", 18);
+        printAnimatedLine("> Initializing VICTORIA...", 10);
+        printAnimatedLine("> Loading task memory...", 10);
+        printAnimatedLine("> Status: ONLINE", 10);
         System.out.println();
-        printAnimatedLine(banner, 2);
+        printAnimatedLine(banner, 1);
     }
 
     /** Prints text one character at a time to create a terminal startup effect. */
     private static void printAnimatedLine(String text, long delayMilliseconds) {
         for (char character : text.toCharArray()) {
             System.out.print(character);
+            System.out.flush();
             pause(delayMilliseconds);
         }
         System.out.println();
@@ -100,11 +100,11 @@ public class Victoria {
                     deleteTask(normalizedCommand, tasks);
                 } else {
                     throw new InvalidCommandException(
-                            "Oops! I don't recognize that command. Try a standard command format.");
+                            "I don't recognize that command. Try a standard command format.");
                 }
 
             } catch (VictoriaException exception) {
-                System.out.println(" OOPS!!! " + exception.getMessage());
+                System.out.println(" Oops! " + exception.getMessage());
             }
 
             System.out.println(HORIZONTAL_LINE);
@@ -179,6 +179,7 @@ public class Victoria {
         System.out.println(">> event ...                CREATE EVENT");
         System.out.println(">> list                     VIEW TASKS");
         System.out.println(">> mark <number>            COMPLETE TASK");
+        System.out.println(">> unmark <number>          RESTORE TASK");
         System.out.println(">> delete <number>          REMOVE TASK");
         System.out.println();
         System.out.println(">> SYSTEM READY");
