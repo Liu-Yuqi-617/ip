@@ -16,7 +16,7 @@ public class TaskList {
 
     /** Adds a task when the list has capacity. */
     public boolean add(String description) {
-        return add(new Task(description));
+        return add(new Todo(description));
     }
 
     /** Adds a task object when the list has capacity. */
@@ -64,6 +64,10 @@ public class TaskList {
 
     /** Prints all stored tasks using one-based numbering. */
     public void printTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println(" There are no tasks in your list.");
+            return;
+        }
         System.out.println(" Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(" " + (i + 1) + "." + tasks.get(i));

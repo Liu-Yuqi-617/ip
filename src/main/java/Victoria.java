@@ -25,6 +25,8 @@ public class Victoria {
             System.out.println(HORIZONTAL_LINE);
             System.out.println(prompt);
             System.out.println(HORIZONTAL_LINE);
+            printCommandFormat();
+            System.out.println(HORIZONTAL_LINE);
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -43,30 +45,26 @@ public class Victoria {
             String command = scanner.nextLine();
             String normalizedCommand = command.trim();
 
-            if (normalizedCommand.equalsIgnoreCase("bye")) {
+            if (normalizedCommand.equals("bye")) {
                 System.out.println(farewell);
                 System.out.println(HORIZONTAL_LINE);
                 break;
             }
 
-            if (normalizedCommand.equalsIgnoreCase("list")) {
+            if (normalizedCommand.equals("list")) {
                 tasks.printTasks();
             } else if (normalizedCommand.startsWith("todo ")) {
-                addTask(tasks, normalizedCommand.substring(5), Task.Type.TODO, "");
+                addTask(tasks, normalizedCommand.substring(5));
             } else if (normalizedCommand.startsWith("deadline ")) {
-                addTimedTask(tasks, normalizedCommand.substring(9), Task.Type.DEADLINE, "/by ");
+                addTimedTask(tasks, normalizedCommand.substring(9), false, "/by ");
             } else if (normalizedCommand.startsWith("event ")) {
-                addTimedTask(tasks, normalizedCommand.substring(5), Task.Type.EVENT, "/from ");
+                addTimedTask(tasks, normalizedCommand.substring(5), true, "/from ");
             } else if (isStatusCommand(normalizedCommand, "mark")) {
                 changeTaskStatus(normalizedCommand, tasks, true);
             } else if (isStatusCommand(normalizedCommand, "unmark")) {
                 changeTaskStatus(normalizedCommand, tasks, false);
-            } else if (tasks.add(normalizedCommand)) {
-                System.out.println(" Got it. I've added this task:");
-                System.out.println("   " + tasks.getTask(tasks.size()));
-                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
             } else {
-                System.out.println(" Task list is full.");
+                System.out.println(" I couldn't understand that command. Please use one of the standard formats above.");
             }
 
             System.out.println(HORIZONTAL_LINE);
@@ -74,34 +72,38 @@ public class Victoria {
     }
 
     /** Adds a task without date/time text. */
-    private static void addTask(TaskList tasks, String description, Task.Type type, String dateTime) {
-        addParsedTask(tasks, description, type, dateTime);
+    private static void addTask(TaskList tasks, String description) {
+        addParsedTask(tasks, new Todo(description));
     }
 
     /** Parses the slash-delimited date/time portion of a deadline or event command. */
-    private static void addTimedTask(TaskList tasks, String command, Task.Type type, String marker) {
+    private static void addTimedTask(TaskList tasks, String command, boolean event, String marker) {
         int markerIndex = command.indexOf(marker);
-        if (markerIndex < 1) {
-            System.out.println(" I couldn't understand that task.");
+        if (markerIndex < 1 || command.indexOf("/by ", markerIndex + marker.length()) >= 0) {
+            System.out.println(" AHHH! I couldn't understand that task.");
             return;
         }
         String description = command.substring(0, markerIndex).trim();
         String dateTime = command.substring(markerIndex + marker.length()).trim();
-        if (type == Task.Type.EVENT) {
-            int toIndex = dateTime.indexOf("/to ");
-            if (toIndex >= 0) {
-                dateTime = "from: " + dateTime.substring(0, toIndex).trim()
-                        + " to: " + dateTime.substring(toIndex + 4).trim();
-            }
-        } else {
-            dateTime = dateTime;
+        if (dateTime.isBlank()) {
+            System.out.println(" AHHH! I couldn't understand that task.");
+            return;
         }
-        addParsedTask(tasks, description, type, dateTime);
+        if (!event) {
+            addParsedTask(tasks, new Deadline(description, dateTime));
+            return;
+        }
+        int toIndex = dateTime.indexOf("/to ");
+        if (toIndex <= 0 || dateTime.substring(toIndex + 4).isBlank()) {
+            System.out.println(" AHHH! I couldn't understand that task.");
+            return;
+        }
+        addParsedTask(tasks, new Event(description, dateTime.substring(0, toIndex).trim(),
+                dateTime.substring(toIndex + 4).trim()));
     }
 
     /** Adds a parsed task and reports the result. */
-    private static void addParsedTask(TaskList tasks, String description, Task.Type type, String dateTime) {
-        Task task = new Task(description, type, dateTime);
+    private static void addParsedTask(TaskList tasks, Task task) {
         if (tasks.add(task)) {
             System.out.println(" Got it. I've added this task:");
             System.out.println("   " + task);
@@ -111,9 +113,19 @@ public class Victoria {
         }
     }
 
+    /** Prints the command grammar shown to users before they enter commands. */
+    private static void printCommandFormat() {
+        System.out.println(" Standard command formats:");
+        System.out.println("   todo <description>");
+        System.out.println("   deadline <description> /by <date/time>");
+        System.out.println("   event <description> /from <start> /to <end>");
+        System.out.println("   list");
+        System.out.println("   mark <number> | unmark <number> | bye");
+    }
+
     /** Returns true only when the command has a status keyword followed by a number. */
     private static boolean isStatusCommand(String command, String commandName) {
-        return command.matches("(?i)^" + commandName + "\\s+\\d+$");
+        return command.matches("^" + commandName + "\\s+\\d+$");
     }
 
     /** Parses a validated status command and delegates the state change to the task list. */
