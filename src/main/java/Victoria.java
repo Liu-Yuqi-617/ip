@@ -49,8 +49,10 @@ public class Victoria {
 
             if (normalizedCommand.equalsIgnoreCase("list")) {
                 tasks.printTasks();
-            } else if (normalizedCommand.toLowerCase().startsWith("mark ")) {
-                markTask(normalizedCommand, tasks);
+            } else if (isStatusCommand(normalizedCommand, "mark")) {
+                changeTaskStatus(normalizedCommand, tasks, true);
+            } else if (isStatusCommand(normalizedCommand, "unmark")) {
+                changeTaskStatus(normalizedCommand, tasks, false);
             } else if (tasks.add(normalizedCommand)) {
                 System.out.println(" added: " + normalizedCommand);
             } else {
@@ -61,72 +63,36 @@ public class Victoria {
         }
     }
 
-    /** Parses a mark command and delegates the state change to the task list. */
-    private static void markTask(String command, TaskList tasks) {
-        try {
-            int taskNumber = Integer.parseInt(command.substring("mark ".length()).trim());
-            String task = tasks.markDone(taskNumber);
+    /** Returns true only when the command has a status keyword followed by a number. */
+    private static boolean isStatusCommand(String command, String commandName) {
+        return command.matches("(?i)^" + commandName + "\\s+\\d+$");
+    }
+
+    /** Parses a validated status command and delegates the state change to the task list. */
+    private static void changeTaskStatus(String command, TaskList tasks, boolean done) {
+        String commandName = done ? "mark " : "unmark ";
+        int taskNumber = Integer.parseInt(command.substring(commandName.length()).trim());
+        Task task = tasks.getTask(taskNumber);
             if (task == null) {
-                System.out.println(" Task number is invalid.");
-            } else {
+                System.out.println(" Oops! Task number is invalid.");
+            } else if (done && task.isDone()) {
+                System.out.println(" This task is already done:");
+                System.out.println("   " + task);
+                System.out.println(" Go for other tasks!");
+            } else if (!done && !task.isDone()) {
+                System.out.println(" This task is already marked as not done:");
+                System.out.println("   " + task);
+                System.out.println(" Keep up! You can do this!");
+            } else if (done) {
+                tasks.markDone(taskNumber);
                 System.out.println(" Nice! I've marked this task as done:");
-                System.out.println("   [X] " + task);
+                System.out.println("   " + task);
+            } else {
+                tasks.markNotDone(taskNumber);
+                System.out.println(" OK, I've marked this task as not done yet:");
+                System.out.println("   " + task);
+                System.out.println(" Keep up! You can do this!");
             }
-        } catch (NumberFormatException exception) {
-            System.out.println(" Please enter a valid task number.");
-        }
     }
 
-    /**
-     * Stores tasks in memory while keeping the storage details separate from command handling.
-     */
-    private static class TaskList {
-        private final String[] tasks;
-        private final boolean[] completed;
-        private int taskCount;
-
-        /**
-         * Creates an empty task list with the given capacity.
-         *
-         * @param capacity maximum number of tasks that can be stored
-         */
-        TaskList(int capacity) {
-            tasks = new String[capacity];
-            completed = new boolean[capacity];
-        }
-
-        /**
-         * Adds a task if there is still space in the list.
-         *
-         * @param task task text to store
-         * @return true if the task was stored, otherwise false
-         */
-        boolean add(String task) {
-            if (taskCount < tasks.length) {
-                tasks[taskCount] = task;
-                taskCount++;
-                return true;
-            }
-            return false;
-        }
-
-        /** Marks the requested one-based task number as done and returns its text. */
-        String markDone(int taskNumber) {
-            int index = taskNumber - 1;
-            if (index < 0 || index >= taskCount) {
-                return null;
-            }
-            completed[index] = true;
-            return tasks[index];
-        }
-
-        /** Prints all stored tasks using one-based numbering and completion markers. */
-        void printTasks() {
-            System.out.println(" Here are the tasks in your list:");
-            for (int i = 0; i < taskCount; i++) {
-                String marker = completed[i] ? "[X]" : "[ ]";
-                System.out.println(" " + (i + 1) + "." + marker + " " + tasks[i]);
-            }
-        }
-    }
 }
