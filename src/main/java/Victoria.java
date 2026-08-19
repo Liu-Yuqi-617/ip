@@ -28,7 +28,7 @@ public class Victoria {
     }
 
     /**
-     * Reads and echoes commands until the user enters the exit command.
+     * Reads and echoes commands until the user enters the exit command "bye".
      *
      * @param scanner  source of commands entered by the user
      * @param hLine    separator printed after each response
