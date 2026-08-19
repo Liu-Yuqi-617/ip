@@ -19,9 +19,11 @@ public class Victoria {
         String farewell = "Bye! Always nice to chat with you. See you soon!";
 
         if (args.length == 0) {
-            System.out.println(banner);
+            printBootSequence(banner);
             System.out.println(HORIZONTAL_LINE);
-            System.out.println(greeting);
+            printAnimatedLine("[ VICTORIA TASK SYSTEM ]", 12);
+            printAnimatedLine("> Welcome back, task champion.", 12);
+            printAnimatedLine("> Your next achievement is waiting.", 12);
             System.out.println(HORIZONTAL_LINE);
             System.out.println(prompt);
             System.out.println(HORIZONTAL_LINE);
@@ -31,6 +33,33 @@ public class Victoria {
 
         Scanner scanner = new Scanner(System.in);
         runCommandLoop(scanner, farewell, new TaskList(MAX_TASKS));
+    }
+
+    /** Prints the cyber-style startup sequence before the command prompt. */
+    private static void printBootSequence(String banner) {
+        printAnimatedLine("> Initializing VICTORIA...", 18);
+        printAnimatedLine("> Loading task memory...", 18);
+        printAnimatedLine("> Status: ONLINE", 18);
+        System.out.println();
+        printAnimatedLine(banner, 2);
+    }
+
+    /** Prints text one character at a time to create a terminal startup effect. */
+    private static void printAnimatedLine(String text, long delayMilliseconds) {
+        for (char character : text.toCharArray()) {
+            System.out.print(character);
+            pause(delayMilliseconds);
+        }
+        System.out.println();
+    }
+
+    /** Pauses animation briefly without preventing the application from starting. */
+    private static void pause(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
