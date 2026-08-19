@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 /**
- * A simple command-line chatbot that echoes commands until the user says bye.
+ * A simple command-line chatbot that stores and lists tasks until the user says bye.
  */
 public class Victoria {
     private static final int MAX_TASKS = 100;
@@ -26,7 +26,7 @@ public class Victoria {
         System.out.println(h_line);
 
         Scanner scanner = new Scanner(System.in);
-        runCommandLoop(scanner, h_line, farewell, new String[MAX_TASKS]);
+        runCommandLoop(scanner, h_line, farewell, new TaskList(MAX_TASKS));
     }
 
     /**
@@ -37,9 +37,7 @@ public class Victoria {
      * @param farewell message printed before the program exits
      * @param tasks    in-memory storage for the user's tasks
      */
-    private static void runCommandLoop(Scanner scanner, String hLine, String farewell, String[] tasks) {
-        int taskCount = 0;
-
+    private static void runCommandLoop(Scanner scanner, String hLine, String farewell, TaskList tasks) {
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
             String normalizedCommand = command.trim();
@@ -51,16 +49,53 @@ public class Victoria {
             }
 
             if (normalizedCommand.equalsIgnoreCase("list")) {
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println(" " + (i + 1) + ". " + tasks[i]);
-                }
-            } else if (taskCount < tasks.length) {
-                tasks[taskCount] = command;
-                taskCount++;
-                System.out.println(" added: " + command);
+                tasks.printTasks();
+            } else if (tasks.add(normalizedCommand)) {
+                System.out.println(" added: " + normalizedCommand);
+            } else {
+                System.out.println(" Task list is full.");
             }
 
             System.out.println(hLine);
+        }
+    }
+
+    /**
+     * Stores tasks in memory while keeping the storage details separate from command handling.
+     */
+    private static class TaskList {
+        private final String[] tasks;
+        private int taskCount;
+
+        /**
+         * Creates an empty task list with the given capacity.
+         *
+         * @param capacity maximum number of tasks that can be stored
+         */
+        TaskList(int capacity) {
+            tasks = new String[capacity];
+        }
+
+        /**
+         * Adds a task if there is still space in the list.
+         *
+         * @param task task text to store
+         * @return true if the task was stored, otherwise false
+         */
+        boolean add(String task) {
+            if (taskCount < tasks.length) {
+                tasks[taskCount] = task;
+                taskCount++;
+                return true;
+            }
+            return false;
+        }
+
+        /** Prints all stored tasks using one-based numbering. */
+        void printTasks() {
+            for (int i = 0; i < taskCount; i++) {
+                System.out.println(" " + (i + 1) + ". " + tasks[i]);
+            }
         }
     }
 }
