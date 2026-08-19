@@ -70,6 +70,7 @@ public class Victoria {
      * @param tasks    in-memory storage for the user's tasks
      */
     private static void runCommandLoop(Scanner scanner, String farewell, TaskList tasks) {
+
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
             String normalizedCommand = command.trim();
@@ -118,6 +119,7 @@ public class Victoria {
     /** Parses the slash-delimited date/time portion of a deadline or event command. */
     private static void addTimedTask(TaskList tasks, String command, boolean event, String marker) {
         int markerIndex = command.indexOf(marker);
+
         if (markerIndex < 0) {
             if (event) {
                 throw new InvalidEventException("The event is missing /from <start>.");
@@ -155,6 +157,7 @@ public class Victoria {
 
     /** Adds a parsed task and reports the result. */
     private static void addParsedTask(TaskList tasks, Task task) {
+
         if (task.getDescription() == null || task.getDescription().isBlank()) {
             throw new EmptyDescriptionException("The description of a task cannot be empty.");
         }
@@ -169,6 +172,7 @@ public class Victoria {
 
     /** Prints the command grammar shown to users before they enter commands. */
     private static void printCommandFormat() {
+
         System.out.println(">> AVAILABLE COMMANDS");
         System.out.println(">> todo <description>       CREATE TASK");
         System.out.println(">> deadline ...             SET DEADLINE");
@@ -182,11 +186,13 @@ public class Victoria {
 
     /** Returns true only when the command has a status keyword followed by a number. */
     private static boolean isStatusCommand(String command, String commandName) {
+
         return command.matches("^" + commandName + "\\s+\\d+$");
     }
 
     /** Parses a validated status command and delegates the state change to the task list. */
     private static void changeTaskStatus(String command, TaskList tasks, boolean done) {
+
         String commandName = done ? "mark " : "unmark ";
         int taskNumber = Integer.parseInt(command.substring(commandName.length()).trim());
         Task task = tasks.getTask(taskNumber);
