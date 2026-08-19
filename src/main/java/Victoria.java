@@ -45,14 +45,17 @@ public class Victoria {
             String command = scanner.nextLine();
             String normalizedCommand = command.trim();
 
-            if (normalizedCommand.equals("bye")) {
+            try {
+                if (normalizedCommand.equals("bye")) {
                 System.out.println(farewell);
                 System.out.println(HORIZONTAL_LINE);
                 break;
             }
 
-            if (normalizedCommand.equals("list")) {
+                if (normalizedCommand.equals("list")) {
                 tasks.printTasks();
+            } else if (normalizedCommand.equals("todo")) {
+                throw new VictoriaException("The description of a task cannot be empty.");
             } else if (normalizedCommand.startsWith("todo ")) {
                 addTask(tasks, normalizedCommand.substring(5));
             } else if (normalizedCommand.startsWith("deadline ")) {
@@ -64,7 +67,10 @@ public class Victoria {
             } else if (isStatusCommand(normalizedCommand, "unmark")) {
                 changeTaskStatus(normalizedCommand, tasks, false);
             } else {
-                System.out.println(" AHHH! I couldn't understand that command. Please use one of the standard formats above.");
+                throw new VictoriaException("I don't recognize that command. Please use a standard command format.");
+            }
+            } catch (VictoriaException exception) {
+                System.out.println(" OOPS!!! " + exception.getMessage());
             }
 
             System.out.println(HORIZONTAL_LINE);
@@ -79,24 +85,33 @@ public class Victoria {
     /** Parses the slash-delimited date/time portion of a deadline or event command. */
     private static void addTimedTask(TaskList tasks, String command, boolean event, String marker) {
         int markerIndex = command.indexOf(marker);
-        if (markerIndex < 1 || command.indexOf("/by ", markerIndex + marker.length()) >= 0) {
-            System.out.println(" AHHH! I couldn't understand that task.");
-            return;
+        if (markerIndex < 0) {
+            if (event) {
+                throw new VictoriaException("The event is missing /from <start>.");
+            }
+            throw new VictoriaException("The deadline is missing /by <date/time>.");
         }
         String description = command.substring(0, markerIndex).trim();
+        if (description.isBlank()) {
+            throw new VictoriaException("The description of this task cannot be empty.");
+        }
         String dateTime = command.substring(markerIndex + marker.length()).trim();
         if (dateTime.isBlank()) {
-            System.out.println(" AHHH! I couldn't understand that task.");
-            return;
+            throw new VictoriaException("The date/time for this task cannot be empty.");
         }
         if (!event) {
             addParsedTask(tasks, new Deadline(description, dateTime));
             return;
         }
         int toIndex = dateTime.indexOf("/to ");
-        if (toIndex <= 0 || dateTime.substring(toIndex + 4).isBlank()) {
-            System.out.println(" AHHH! I couldn't understand that task.");
-            return;
+        if (toIndex < 0) {
+            throw new VictoriaException("The event is missing /to <end>.");
+        }
+        if (dateTime.substring(0, toIndex).trim().isBlank()) {
+            throw new VictoriaException("The event start time after /from cannot be empty.");
+        }
+        if (dateTime.substring(toIndex + 4).trim().isBlank()) {
+            throw new VictoriaException("The event end time after /to cannot be empty.");
         }
         addParsedTask(tasks, new Event(description, dateTime.substring(0, toIndex).trim(),
                 dateTime.substring(toIndex + 4).trim()));
@@ -104,12 +119,15 @@ public class Victoria {
 
     /** Adds a parsed task and reports the result. */
     private static void addParsedTask(TaskList tasks, Task task) {
+        if (task.getDescription() == null || task.getDescription().isBlank()) {
+            throw new VictoriaException("The description of a task cannot be empty.");
+        }
         if (tasks.add(task)) {
             System.out.println(" Got it. I've added this task:");
             System.out.println("   " + task);
             System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
         } else {
-            System.out.println(" Task list is full or the description is empty.");
+            throw new VictoriaException("The task list is full.");
         }
     }
 

@@ -37,6 +37,46 @@ Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
 ```
 
+## Specific deadline and event errors
+
+### Aim
+
+Confirm that malformed deadline and event commands identify whether the description or timing part is missing.
+
+### Inputs
+
+```text
+deadline /by Sunday
+deadline return book
+event /from 2pm /to 4pm
+event meeting /from 2pm
+event meeting /from /to 4pm
+bye
+```
+
+### Command
+
+```text
+java -cp out Victoria --test
+```
+
+### Expected output
+
+```text
+ OOPS!!! The description of this task cannot be empty.
+____________________________________________________________
+ OOPS!!! The deadline is missing /by <date/time>.
+____________________________________________________________
+ OOPS!!! The description of this task cannot be empty.
+____________________________________________________________
+ OOPS!!! The event is missing /to <end>.
+____________________________________________________________
+ OOPS!!! The event start time after /from cannot be empty.
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
 ## Empty list
 
 ### Aim
@@ -88,9 +128,9 @@ java -cp out Victoria --test
 ### Expected output
 
 ```text
- I couldn't understand that command. Please use one of the standard formats above.
+ OOPS!!! I don't recognize that command. Please use a standard command format.
 ____________________________________________________________
- I couldn't understand that command. Please use one of the standard formats above.
+ OOPS!!! I don't recognize that command. Please use a standard command format.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
@@ -153,7 +193,38 @@ java -cp out Victoria --test
 ### Expected output
 
 ```text
- I couldn't understand that command. Please use one of the standard formats above.
+ OOPS!!! I don't recognize that command. Please use a standard command format.
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
+## Handle input errors with exceptions
+
+### Aim
+
+Confirm that empty task descriptions and unknown commands produce specific error messages and do not stop the session.
+
+### Inputs
+
+```text
+todo
+blah
+bye
+```
+
+### Command
+
+```text
+java -cp out Victoria --test
+```
+
+### Expected output
+
+```text
+ OOPS!!! The description of a task cannot be empty.
+____________________________________________________________
+ OOPS!!! I don't recognize that command. Please use a standard command format.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
