@@ -24,6 +24,10 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 # Project-specific requirements
 
+## UI testing
+
+The project-specific `test-ui` skill is in `test-ui/SKILL.md`. After every code update, update `test/ui-test-plan.md` when user-visible behavior or test coverage requires it, then invoke `test-ui` by running `python test-ui/scripts/run_ui_tests.py test/ui-test-plan.md`. The runner records console input and output and stops at the first failed case.
+
 ## Java version:
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.

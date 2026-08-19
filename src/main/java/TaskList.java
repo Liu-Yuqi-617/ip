@@ -16,13 +16,21 @@ public class TaskList {
 
     /** Adds a task when the list has capacity. */
     public boolean add(String description) {
-        if (description == null || description.isBlank()) {
+        return add(new Task(description));
+    }
+
+    /** Adds a task object when the list has capacity. */
+    public boolean add(Task task) {
+        if (task == null) {
+            return false;
+        }
+        if (task.getDescription() == null || task.getDescription().isBlank()) {
             return false;
         }
         if (tasks.size() >= capacity) {
             return false;
         }
-        tasks.add(new Task(description));
+        tasks.add(task);
         return true;
     }
 
@@ -47,6 +55,11 @@ public class TaskList {
     /** Returns a task by its one-based number, or null if the number is invalid. */
     public Task getTask(int taskNumber) {
         return get(taskNumber);
+    }
+
+    /** Returns the number of tasks currently stored. */
+    public int size() {
+        return tasks.size();
     }
 
     /** Prints all stored tasks using one-based numbering. */

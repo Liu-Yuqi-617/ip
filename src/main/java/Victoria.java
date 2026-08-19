@@ -18,12 +18,14 @@ public class Victoria {
         String prompt = "Anything new today? I'm all ears!";
         String farewell = "Bye! Always nice to chat with you. See you soon!";
 
-        System.out.println(banner);
-        System.out.println(HORIZONTAL_LINE);
-        System.out.println(greeting);
-        System.out.println(HORIZONTAL_LINE);
-        System.out.println(prompt);
-        System.out.println(HORIZONTAL_LINE);
+        if (args.length == 0) {
+            System.out.println(banner);
+            System.out.println(HORIZONTAL_LINE);
+            System.out.println(greeting);
+            System.out.println(HORIZONTAL_LINE);
+            System.out.println(prompt);
+            System.out.println(HORIZONTAL_LINE);
+        }
 
         Scanner scanner = new Scanner(System.in);
         runCommandLoop(scanner, farewell, new TaskList(MAX_TASKS));
@@ -49,17 +51,63 @@ public class Victoria {
 
             if (normalizedCommand.equalsIgnoreCase("list")) {
                 tasks.printTasks();
+            } else if (normalizedCommand.startsWith("todo ")) {
+                addTask(tasks, normalizedCommand.substring(5), Task.Type.TODO, "");
+            } else if (normalizedCommand.startsWith("deadline ")) {
+                addTimedTask(tasks, normalizedCommand.substring(9), Task.Type.DEADLINE, "/by ");
+            } else if (normalizedCommand.startsWith("event ")) {
+                addTimedTask(tasks, normalizedCommand.substring(5), Task.Type.EVENT, "/from ");
             } else if (isStatusCommand(normalizedCommand, "mark")) {
                 changeTaskStatus(normalizedCommand, tasks, true);
             } else if (isStatusCommand(normalizedCommand, "unmark")) {
                 changeTaskStatus(normalizedCommand, tasks, false);
             } else if (tasks.add(normalizedCommand)) {
-                System.out.println(" added: " + normalizedCommand);
+                System.out.println(" Got it. I've added this task:");
+                System.out.println("   " + tasks.getTask(tasks.size()));
+                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
             } else {
                 System.out.println(" Task list is full.");
             }
 
             System.out.println(HORIZONTAL_LINE);
+        }
+    }
+
+    /** Adds a task without date/time text. */
+    private static void addTask(TaskList tasks, String description, Task.Type type, String dateTime) {
+        addParsedTask(tasks, description, type, dateTime);
+    }
+
+    /** Parses the slash-delimited date/time portion of a deadline or event command. */
+    private static void addTimedTask(TaskList tasks, String command, Task.Type type, String marker) {
+        int markerIndex = command.indexOf(marker);
+        if (markerIndex < 1) {
+            System.out.println(" I couldn't understand that task.");
+            return;
+        }
+        String description = command.substring(0, markerIndex).trim();
+        String dateTime = command.substring(markerIndex + marker.length()).trim();
+        if (type == Task.Type.EVENT) {
+            int toIndex = dateTime.indexOf("/to ");
+            if (toIndex >= 0) {
+                dateTime = "from: " + dateTime.substring(0, toIndex).trim()
+                        + " to: " + dateTime.substring(toIndex + 4).trim();
+            }
+        } else {
+            dateTime = dateTime;
+        }
+        addParsedTask(tasks, description, type, dateTime);
+    }
+
+    /** Adds a parsed task and reports the result. */
+    private static void addParsedTask(TaskList tasks, String description, Task.Type type, String dateTime) {
+        Task task = new Task(description, type, dateTime);
+        if (tasks.add(task)) {
+            System.out.println(" Got it. I've added this task:");
+            System.out.println("   " + task);
+            System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+        } else {
+            System.out.println(" Task list is full or the description is empty.");
         }
     }
 
