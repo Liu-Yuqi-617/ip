@@ -115,9 +115,9 @@ ____________________________________________________________
    [T][ ] submit report
  Now you have 3 tasks in the list.
 ____________________________________________________________
- Noted. I've removed this task:
+ Yay! I've removed this task:
    [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
- Now you have 2 tasks in the list.
+ You now have 2 tasks. Keep going!
 ____________________________________________________________
  Here are the tasks in your list:
  1.[T][ ] buy milk
@@ -178,9 +178,9 @@ java -cp out Victoria --test
 ### Expected output
 
 ```text
- OOPS!!! I don't recognize that command. Please use a standard command format.
+ OOPS!!! Oops! I don't recognize that command. Try a standard command format.
 ____________________________________________________________
- OOPS!!! I don't recognize that command. Please use a standard command format.
+ OOPS!!! Oops! I don't recognize that command. Try a standard command format.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
@@ -243,7 +243,7 @@ java -cp out Victoria --test
 ### Expected output
 
 ```text
- OOPS!!! I don't recognize that command. Please use a standard command format.
+ OOPS!!! Oops! I don't recognize that command. Try a standard command format.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
@@ -274,7 +274,7 @@ java -cp out Victoria --test
 ```text
  OOPS!!! The description of a task cannot be empty.
 ____________________________________________________________
- OOPS!!! I don't recognize that command. Please use a standard command format.
+ OOPS!!! Oops! I don't recognize that command. Try a standard command format.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________

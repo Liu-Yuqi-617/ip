@@ -47,38 +47,31 @@ public class Victoria {
 
             try {
                 if (normalizedCommand.equals("bye")) {
-                System.out.println(farewell);
-                System.out.println(HORIZONTAL_LINE);
-                break;
-            }
+                    System.out.println(farewell);
+                    System.out.println(HORIZONTAL_LINE);
+                    break;
+                }
 
                 if (normalizedCommand.equals("list")) {
-                tasks.printTasks();
-            }
-                else if (normalizedCommand.equals("todo")) {
+                    tasks.printTasks();
+                } else if (normalizedCommand.equals("todo")) {
                     throw new EmptyDescriptionException("The description of a task cannot be empty.");
-            }
-                else if (normalizedCommand.startsWith("todo ")) {
-                addTask(tasks, normalizedCommand.substring(5));
-            }
-                else if (normalizedCommand.startsWith("deadline ")) {
-                addTimedTask(tasks, normalizedCommand.substring(9), false, "/by ");
-            }
-                else if (normalizedCommand.startsWith("event ")) {
-                addTimedTask(tasks, normalizedCommand.substring(5), true, "/from ");
-            }
-                else if (isStatusCommand(normalizedCommand, "mark")) {
-                changeTaskStatus(normalizedCommand, tasks, true);
-            }
-                else if (isStatusCommand(normalizedCommand, "unmark")) {
-                changeTaskStatus(normalizedCommand, tasks, false);
-            }
-                else if (isStatusCommand(normalizedCommand, "delete")) {
-                deleteTask(normalizedCommand, tasks);
-            }
-                else {
-                throw new InvalidCommandException("Sorry! I don't recognize that command. Please use a standard command format.");
-            }
+                } else if (normalizedCommand.startsWith("todo ")) {
+                    addTask(tasks, normalizedCommand.substring(5));
+                } else if (normalizedCommand.startsWith("deadline ")) {
+                    addTimedTask(tasks, normalizedCommand.substring(9), false, "/by ");
+                } else if (normalizedCommand.startsWith("event ")) {
+                    addTimedTask(tasks, normalizedCommand.substring(5), true, "/from ");
+                } else if (isStatusCommand(normalizedCommand, "mark")) {
+                    changeTaskStatus(normalizedCommand, tasks, true);
+                } else if (isStatusCommand(normalizedCommand, "unmark")) {
+                    changeTaskStatus(normalizedCommand, tasks, false);
+                } else if (isStatusCommand(normalizedCommand, "delete")) {
+                    deleteTask(normalizedCommand, tasks);
+                } else {
+                    throw new InvalidCommandException(
+                            "Oops! I don't recognize that command. Try a standard command format.");
+                }
 
             } catch (VictoriaException exception) {
                 System.out.println(" OOPS!!! " + exception.getMessage());
@@ -198,9 +191,9 @@ public class Victoria {
             System.out.println(" Oops! Task number is invalid.");
             return;
         }
-        System.out.println(" Okie! I've removed this task:");
+        System.out.println(" Yay! I've removed this task:");
         System.out.println("   " + deletedTask);
-        System.out.println(" Now you have " + tasks.size() + " tasks in the list. Let's gooo!");
+        System.out.println(" You now have " + tasks.size() + " tasks. Keep going!");
     }
 
 }
