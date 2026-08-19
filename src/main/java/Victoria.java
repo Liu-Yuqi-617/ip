@@ -4,6 +4,8 @@ import java.util.Scanner;
  * A simple command-line chatbot that echoes commands until the user says bye.
  */
 public class Victoria {
+    private static final int MAX_TASKS = 100;
+
     public static void main(String[] args) {
         String banner = "██╗   ██╗██╗ ██████╗████████╗ ██████╗ ██████╗ ██╗ █████╗ \n"
                 + "██║   ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██║██╔══██╗\n"
@@ -24,7 +26,7 @@ public class Victoria {
         System.out.println(h_line);
 
         Scanner scanner = new Scanner(System.in);
-        runCommandLoop(scanner, h_line, farewell);
+        runCommandLoop(scanner, h_line, farewell, new String[MAX_TASKS]);
     }
 
     /**
@@ -33,18 +35,31 @@ public class Victoria {
      * @param scanner  source of commands entered by the user
      * @param hLine    separator printed after each response
      * @param farewell message printed before the program exits
+     * @param tasks    in-memory storage for the user's tasks
      */
-    private static void runCommandLoop(Scanner scanner, String hLine, String farewell) {
+    private static void runCommandLoop(Scanner scanner, String hLine, String farewell, String[] tasks) {
+        int taskCount = 0;
+
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
+            String normalizedCommand = command.trim();
 
-            if (command.trim().equalsIgnoreCase("bye")) {
+            if (normalizedCommand.equalsIgnoreCase("bye")) {
                 System.out.println(farewell);
                 System.out.println(hLine);
                 break;
             }
 
-            System.out.println(" " + command);
+            if (normalizedCommand.equalsIgnoreCase("list")) {
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println(" " + (i + 1) + ". " + tasks[i]);
+                }
+            } else if (taskCount < tasks.length) {
+                tasks[taskCount] = command;
+                taskCount++;
+                System.out.println(" added: " + command);
+            }
+
             System.out.println(hLine);
         }
     }
