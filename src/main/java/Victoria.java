@@ -64,7 +64,7 @@ public class Victoria {
             } else if (isStatusCommand(normalizedCommand, "unmark")) {
                 changeTaskStatus(normalizedCommand, tasks, false);
             } else {
-                System.out.println(" I couldn't understand that command. Please use one of the standard formats above.");
+                System.out.println(" AHHH! I couldn't understand that command. Please use one of the standard formats above.");
             }
 
             System.out.println(HORIZONTAL_LINE);
@@ -115,12 +115,14 @@ public class Victoria {
 
     /** Prints the command grammar shown to users before they enter commands. */
     private static void printCommandFormat() {
-        System.out.println(" Standard command formats:");
-        System.out.println("   todo <description>");
-        System.out.println("   deadline <description> /by <date/time>");
-        System.out.println("   event <description> /from <start> /to <end>");
-        System.out.println("   list");
-        System.out.println("   mark <number> | unmark <number> | bye");
+        System.out.println(" Hey! To better communicate, pls take note of the standard command formats:");
+        System.out.println("   todo <description>: add a todo");
+        System.out.println("   deadline <description> /by <time or date>: set a ddl");
+        System.out.println("   event <description> /from <start> /to <end>: add an event");
+        System.out.println("   list: see all tasks");
+        System.out.println("   mark <number>: mark task as done");
+        System.out.println("   mark <number>: undo a mark");
+        System.out.println("   \nThank you for following! Have fun!");
     }
 
     /** Returns true only when the command has a status keyword followed by a number. */
@@ -136,7 +138,7 @@ public class Victoria {
             if (task == null) {
                 System.out.println(" Oops! Task number is invalid.");
             } else if (done && task.isDone()) {
-                System.out.println(" This task is already done:");
+                System.out.println(" Hurray! This task is already done:");
                 System.out.println("   " + task);
                 System.out.println(" Go for other tasks!");
             } else if (!done && !task.isDone()) {
