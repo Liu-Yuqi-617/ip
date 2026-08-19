@@ -57,6 +57,12 @@ public class TaskList {
         return get(taskNumber);
     }
 
+    /** Removes and returns a task by its one-based number, or null if invalid. */
+    public Task delete(int taskNumber) {
+        int index = taskNumber - 1;
+        return index >= 0 && index < tasks.size() ? tasks.remove(index) : null;
+    }
+
     /** Returns the number of tasks currently stored. */
     public int size() {
         return tasks.size();

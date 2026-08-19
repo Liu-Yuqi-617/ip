@@ -77,6 +77,56 @@ Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
 ```
 
+## Delete a task
+
+### Aim
+
+Confirm that deleting a one-based task number removes the task and updates the task count.
+
+### Inputs
+
+```text
+todo buy milk
+event project meeting /from Aug 6th 2pm /to 4pm
+todo submit report
+delete 2
+list
+bye
+```
+
+### Command
+
+```text
+java -cp out Victoria --test
+```
+
+### Expected output
+
+```text
+ Got it. I've added this task:
+   [T][ ] buy milk
+ Now you have 1 tasks in the list.
+____________________________________________________________
+ Got it. I've added this task:
+   [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+ Now you have 2 tasks in the list.
+____________________________________________________________
+ Got it. I've added this task:
+   [T][ ] submit report
+ Now you have 3 tasks in the list.
+____________________________________________________________
+ Noted. I've removed this task:
+   [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+ Now you have 2 tasks in the list.
+____________________________________________________________
+ Here are the tasks in your list:
+ 1.[T][ ] buy milk
+ 2.[T][ ] submit report
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
 ## Empty list
 
 ### Aim
