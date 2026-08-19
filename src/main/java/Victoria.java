@@ -169,15 +169,15 @@ public class Victoria {
 
     /** Prints the command grammar shown to users before they enter commands. */
     private static void printCommandFormat() {
-        System.out.println(" Hey! To better communicate, pls take note of the standard command formats:");
-        System.out.println("   todo <description>: add a todo");
-        System.out.println("   deadline <description> /by <time or date>: set a ddl");
-        System.out.println("   event <description> /from <start> /to <end>: add an event");
-        System.out.println("   list: see all tasks");
-        System.out.println("   mark <number>: mark task as done");
-        System.out.println("   mark <number>: undo a mark");
-        System.out.println("   delete <number>: delete a task");
-        System.out.println("   \nThank you for following! Have fun!");
+        System.out.println(">> AVAILABLE COMMANDS");
+        System.out.println(">> todo <description>       CREATE TASK");
+        System.out.println(">> deadline ...             SET DEADLINE");
+        System.out.println(">> event ...                CREATE EVENT");
+        System.out.println(">> list                     VIEW TASKS");
+        System.out.println(">> mark <number>            COMPLETE TASK");
+        System.out.println(">> delete <number>          REMOVE TASK");
+        System.out.println();
+        System.out.println(">> SYSTEM READY");
     }
 
     /** Returns true only when the command has a status keyword followed by a number. */
