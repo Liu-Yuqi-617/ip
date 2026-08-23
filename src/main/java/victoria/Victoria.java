@@ -68,6 +68,8 @@ public class Victoria {
                     tasks.printTasks();
                 } else if (normalizedCommand.startsWith("list on ")) {
                     printTasksOnDate(tasks, normalizedCommand.substring(8).trim());
+                } else if (normalizedCommand.startsWith("find ")) {
+                    findTasks(tasks, normalizedCommand.substring(5).trim());
                 } else if (normalizedCommand.equals("todo")) {
                     throw new EmptyDescriptionException("The description of a task cannot be empty.");
                 } else if (normalizedCommand.startsWith("todo ")) {
@@ -109,6 +111,14 @@ public class Victoria {
         } catch (DateTimeParseException exception) {
             throw new InvalidCommandException("The date must use yyyy-MM-dd.");
         }
+    }
+
+    /** Validates a search keyword and prints tasks whose descriptions contain it. */
+    private static void findTasks(TaskList tasks, String keyword) {
+        if (keyword.isBlank()) {
+            throw new InvalidCommandException("The search keyword cannot be empty.");
+        }
+        tasks.printTasksContaining(keyword);
     }
 
     /** Parses the slash-delimited date portion of a deadline or event command. */

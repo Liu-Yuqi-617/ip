@@ -40,6 +40,51 @@ Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
 ```
 
+## Find tasks by description keyword
+
+### Aim
+
+Confirm that `find` displays tasks whose descriptions contain a case-insensitive keyword and keeps their original task numbers.
+
+### Inputs
+
+```text
+todo read book
+deadline return book /by 2019-06-06
+todo buy milk
+find BOOK
+bye
+```
+
+### Command
+
+```text
+java -cp out Victoria --test
+```
+
+### Expected output
+
+```text
+ Got it. I've added this task:
+   [T][ ] read book
+ Now you have 1 tasks in the list.
+____________________________________________________________
+ Got it. I've added this task:
+   [D][ ] return book (by: Jun 06 2019)
+ Now you have 2 tasks in the list.
+____________________________________________________________
+ Got it. I've added this task:
+   [T][ ] buy milk
+ Now you have 3 tasks in the list.
+____________________________________________________________
+ Here are the matching tasks in your list:
+ 1.[T][ ] read book
+ 2.[D][ ] return book (by: Jun 06 2019)
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
 ## Specific deadline and event errors
 
 ### Aim
