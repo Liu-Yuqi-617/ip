@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
@@ -110,6 +113,8 @@ public class Victoria {
 
                 if (normalizedCommand.equals("list")) {
                     tasks.printTasks();
+                } else if (normalizedCommand.startsWith("list on ")) {
+                    printTasksOnDate(tasks, normalizedCommand.substring(8).trim());
                 } else if (normalizedCommand.equals("todo")) {
                     throw new EmptyDescriptionException("The description of a task cannot be empty.");
                 } else if (normalizedCommand.startsWith("todo ")) {
@@ -144,7 +149,16 @@ public class Victoria {
         addParsedTask(tasks, new Todo(description));
     }
 
-    /** Parses the slash-delimited date/time portion of a deadline or event command. */
+    /** Parses a date query and prints deadlines/events occurring on that date. */
+    private static void printTasksOnDate(TaskList tasks, String dateText) {
+        try {
+            tasks.printTasksOn(LocalDate.parse(dateText, DateTimeFormatter.ofPattern("uuuu-MM-dd")));
+        } catch (DateTimeParseException exception) {
+            throw new InvalidCommandException("The date must use yyyy-MM-dd.");
+        }
+    }
+
+    /** Parses the slash-delimited date portion of a deadline or event command. */
     private static void addTimedTask(TaskList tasks, String command, boolean event, String marker) {
         int markerIndex = command.indexOf(marker);
 
@@ -161,7 +175,7 @@ public class Victoria {
         String dateTime = command.substring(markerIndex + marker.length()).trim();
         if (dateTime.isBlank()) {
             if (event) {
-                throw new InvalidEventException("The event date/time cannot be empty.");
+                throw new InvalidEventException("The event date cannot be empty.");
             }
             throw new InvalidDeadlineException("The deadline date/time cannot be empty.");
         }
@@ -203,9 +217,10 @@ public class Victoria {
 
         System.out.println(">> AVAILABLE COMMANDS");
         System.out.println(">> todo <description>       CREATE TASK");
-        System.out.println(">> deadline ...             SET DEADLINE");
-        System.out.println(">> event ...                CREATE EVENT");
+        System.out.println(">> deadline <description> /by <date> (yyyy-MM-dd)");
+        System.out.println(">> event <description> /from <date> /to <date> (yyyy-MM-dd)");
         System.out.println(">> list                     VIEW TASKS");
+        System.out.println(">> list on <date> (yyyy-MM-dd) VIEW DEADLINES/EVENTS");
         System.out.println(">> mark <number>            COMPLETE TASK");
         System.out.println(">> unmark <number>          RESTORE TASK");
         System.out.println(">> delete <number>          REMOVE TASK");

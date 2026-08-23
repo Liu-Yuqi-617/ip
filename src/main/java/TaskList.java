@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 /** Stores and updates the tasks belonging to the user. */
 public class TaskList {
@@ -77,6 +78,27 @@ public class TaskList {
         System.out.println(" Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(" " + (i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /** Prints deadlines and events occurring on the supplied date. */
+    public void printTasksOn(LocalDate date) {
+        int matchingTaskNumber = 0;
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            boolean occursOnDate = task instanceof Deadline deadline && deadline.getDate().equals(date)
+                    || task instanceof Event event
+                    && !date.isBefore(event.getStartDate()) && !date.isAfter(event.getEndDate());
+            if (occursOnDate) {
+                if (matchingTaskNumber == 0) {
+                    System.out.println(" Here are the tasks occurring on " + date + ":");
+                }
+                matchingTaskNumber++;
+                System.out.println(" " + (i + 1) + "." + task);
+            }
+        }
+        if (matchingTaskNumber == 0) {
+            System.out.println(" There are no deadlines or events on " + date + ".");
         }
     }
 

@@ -119,7 +119,7 @@ Confirm that deleting a one-based task number removes the task and updates the t
 
 ```text
 todo buy milk
-event project meeting /from Aug 6th 2pm /to 4pm
+event project meeting /from 2019-08-06 /to 2019-08-06
 todo submit report
 delete 2
 list
@@ -140,7 +140,7 @@ java -cp out Victoria --test
  Now you have 1 tasks in the list.
 ____________________________________________________________
  Got it. I've added this task:
-   [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+   [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
  Got it. I've added this task:
@@ -148,7 +148,7 @@ ____________________________________________________________
  Now you have 3 tasks in the list.
 ____________________________________________________________
  Yay! I've removed this task:
-   [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+   [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
  You now have 2 tasks. Keep going!
 ____________________________________________________________
  Here are the tasks in your list:
@@ -251,13 +251,13 @@ ____________________________________________________________
 
 ### Aim
 
-Confirm that deadline and event commands create the correct subclasses and display their string date/time values.
+Confirm that deadline and event commands create the correct subclasses and format deadline date values.
 
 ### Inputs
 
 ```text
-deadline return book /by Sunday
-event project meeting /from Mon 2pm /to 4pm
+deadline return book /by 2019-12-02
+event project meeting /from 2019-08-06 /to 2019-08-06
 bye
 ```
 
@@ -271,12 +271,52 @@ java -cp out Victoria --test
 
 ```text
  Got it. I've added this task:
-   [D][ ] return book (by: Sunday)
+   [D][ ] return book (by: Dec 02 2019)
  Now you have 1 tasks in the list.
 ____________________________________________________________
  Got it. I've added this task:
-   [E][ ] project meeting (from: Mon 2pm to: 4pm)
+   [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
  Now you have 2 tasks in the list.
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
+## List deadlines and events on a date
+
+### Aim
+
+Confirm that a date query finds deadlines on that date and events spanning that date.
+
+### Inputs
+
+```text
+deadline submit report /by 2019-10-15
+event project meeting /from 2019-10-14 /to 2019-10-16
+list on 2019-10-15
+bye
+```
+
+### Command
+
+```text
+java -cp out Victoria --test
+```
+
+### Expected output
+
+```text
+ Got it. I've added this task:
+   [D][ ] submit report (by: Oct 15 2019)
+ Now you have 1 tasks in the list.
+____________________________________________________________
+ Got it. I've added this task:
+   [E][ ] project meeting (from: Oct 14 2019 to: Oct 16 2019)
+ Now you have 2 tasks in the list.
+____________________________________________________________
+ Here are the tasks occurring on 2019-10-15:
+ 1.[D][ ] submit report (by: Oct 15 2019)
+ 2.[E][ ] project meeting (from: Oct 14 2019 to: Oct 16 2019)
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
