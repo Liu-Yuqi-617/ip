@@ -119,7 +119,7 @@ Confirm that deleting a one-based task number removes the task and updates the t
 
 ```text
 todo buy milk
-event project meeting /from Aug 6th 2pm /to 4pm
+event project meeting /from 2019-08-06 /to 2019-08-06
 todo submit report
 delete 2
 list
@@ -140,7 +140,7 @@ java -cp out Victoria --test
  Now you have 1 tasks in the list.
 ____________________________________________________________
  Got it. I've added this task:
-   [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+   [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
  Got it. I've added this task:
@@ -148,7 +148,7 @@ ____________________________________________________________
  Now you have 3 tasks in the list.
 ____________________________________________________________
  Yay! I've removed this task:
-   [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+   [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
  You now have 2 tasks. Keep going!
 ____________________________________________________________
  Here are the tasks in your list:
@@ -257,7 +257,7 @@ Confirm that deadline and event commands create the correct subclasses and forma
 
 ```text
 deadline return book /by 2019-12-02
-event project meeting /from Mon 2pm /to 4pm
+event project meeting /from 2019-08-06 /to 2019-08-06
 bye
 ```
 
@@ -275,7 +275,7 @@ java -cp out Victoria --test
  Now you have 1 tasks in the list.
 ____________________________________________________________
  Got it. I've added this task:
-   [E][ ] project meeting (from: Mon 2pm to: 4pm)
+   [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
