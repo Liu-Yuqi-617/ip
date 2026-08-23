@@ -251,12 +251,12 @@ ____________________________________________________________
 
 ### Aim
 
-Confirm that deadline and event commands create the correct subclasses and display their string date/time values.
+Confirm that deadline and event commands create the correct subclasses and format deadline date/time values.
 
 ### Inputs
 
 ```text
-deadline return book /by Sunday
+deadline return book /by 2/12/2019 1800
 event project meeting /from Mon 2pm /to 4pm
 bye
 ```
@@ -271,7 +271,7 @@ java -cp out Victoria --test
 
 ```text
  Got it. I've added this task:
-   [D][ ] return book (by: Sunday)
+   [D][ ] return book (by: Dec 02 2019 1800)
  Now you have 1 tasks in the list.
 ____________________________________________________________
  Got it. I've added this task:
