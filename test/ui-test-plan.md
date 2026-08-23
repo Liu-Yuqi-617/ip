@@ -80,6 +80,35 @@ Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
 ```
 
+## Load saved tasks
+
+### Aim
+
+Confirm that a task record already present on disk is loaded when Victoria starts.
+
+### Inputs
+
+```text
+list
+bye
+```
+
+### Command
+
+```text
+java -cp out Victoria --test
+```
+
+### Expected output
+
+```text
+ Here are the tasks in your list:
+ 1.[T][X] persistent task
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
 ## Delete a task
 
 ### Aim
@@ -125,6 +154,35 @@ ____________________________________________________________
  Here are the tasks in your list:
  1.[T][ ] buy milk
  2.[T][ ] submit report
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
+## Ignore corrupted records
+
+### Aim
+
+Confirm that malformed records on disk are ignored while valid records still load.
+
+### Inputs
+
+```text
+list
+bye
+```
+
+### Command
+
+```text
+java -cp out Victoria --test
+```
+
+### Expected output
+
+```text
+ Here are the tasks in your list:
+ 1.[T][ ] valid tasks
 ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________

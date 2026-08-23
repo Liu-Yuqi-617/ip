@@ -43,6 +43,13 @@ def main() -> int:
         saved_tasks = Path("data/victoria.txt")
         if saved_tasks.exists():
             saved_tasks.unlink()
+        if name == "Load saved tasks":
+            saved_tasks.parent.mkdir(parents=True, exist_ok=True)
+            saved_tasks.write_text("T|1|cGVyc2lzdGVudCB0YXNr\n", encoding="utf-8")
+        if name == "Ignore corrupted records":
+            saved_tasks.parent.mkdir(parents=True, exist_ok=True)
+            saved_tasks.write_text("not a task\nD|0|bad-base64|!!!\nT|0|dmFsaWQgdGFza3M=\n",
+                                   encoding="utf-8")
         print(f"\n=== Test {number}: {name} ===\nAim: {aim}\n$ {command}")
         print(f"--- console input ---\n{inputs if inputs else '(none)'}\n--- console output ---")
         result = subprocess.run(command, input=inputs + ("\n" if inputs else ""), text=True,
