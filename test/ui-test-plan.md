@@ -282,6 +282,46 @@ Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
 ```
 
+## List deadlines and events on a date
+
+### Aim
+
+Confirm that a date query finds deadlines on that date and events spanning that date.
+
+### Inputs
+
+```text
+deadline submit report /by 2019-10-15
+event project meeting /from 2019-10-14 /to 2019-10-16
+list on 2019-10-15
+bye
+```
+
+### Command
+
+```text
+java -cp out Victoria --test
+```
+
+### Expected output
+
+```text
+ Got it. I've added this task:
+   [D][ ] submit report (by: Oct 15 2019)
+ Now you have 1 tasks in the list.
+____________________________________________________________
+ Got it. I've added this task:
+   [E][ ] project meeting (from: Oct 14 2019 to: Oct 16 2019)
+ Now you have 2 tasks in the list.
+____________________________________________________________
+ Here are the tasks occurring on 2019-10-15:
+ 1.[D][ ] submit report (by: Oct 15 2019)
+ 2.[E][ ] project meeting (from: Oct 14 2019 to: Oct 16 2019)
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
 ## Reject non-standard input
 
 ### Aim

@@ -23,6 +23,9 @@ public class Deadline extends Task {
     /** Returns the deadline as a machine-readable value for persistence. */
     public String getBy() { return by.toString(); }
 
+    /** Returns the date on which this deadline occurs. */
+    public LocalDate getDate() { return by; }
+
     private static LocalDate parseDate(String value) {
         try {
             return LocalDate.parse(value, DateTimeFormatter.ofPattern("uuuu-MM-dd"));

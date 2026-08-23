@@ -21,6 +21,12 @@ public class Event extends Task {
     /** Returns the event end text entered by the user. */
     public String getTo() { return to.toString(); }
 
+    /** Returns the event start date. */
+    public LocalDate getStartDate() { return from; }
+
+    /** Returns the event end date. */
+    public LocalDate getEndDate() { return to; }
+
     private static LocalDate parseDate(String value) {
         try {
             return LocalDate.parse(value, DateTimeFormatter.ofPattern("uuuu-MM-dd"));
