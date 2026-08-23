@@ -2,6 +2,7 @@ package victoria.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.time.LocalDate;
 
 /** Stores and updates the tasks belonging to the user. */
@@ -101,6 +102,24 @@ public class TaskList {
         }
         if (matchingTaskNumber == 0) {
             System.out.println(" There are no deadlines or events on " + date + ".");
+        }
+    }
+
+    /** Prints tasks whose descriptions contain the supplied keyword, ignoring case. */
+    public void printTasksContaining(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        int matchingTaskCount = 0;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
+                if (matchingTaskCount == 0) {
+                    System.out.println(" Here are the matching tasks in your list:");
+                }
+                matchingTaskCount++;
+                System.out.println(" " + (i + 1) + "." + tasks.get(i));
+            }
+        }
+        if (matchingTaskCount == 0) {
+            System.out.println(" There are no matching tasks in your list.");
         }
     }
 

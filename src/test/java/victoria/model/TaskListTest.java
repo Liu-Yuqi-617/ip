@@ -129,4 +129,30 @@ class TaskListTest {
 
         assertTrue(output.toString().contains("There are no deadlines or events"));
     }
+
+    @Test
+    void printTasksContaining_keywordIsCaseInsensitiveAndKeepsOriginalNumbers() {
+        TaskList tasks = new TaskList(3);
+        tasks.add("Read book");
+        tasks.add("Buy milk");
+        tasks.add("Return BOOK");
+
+        tasks.printTasksContaining("book");
+
+        String printed = output.toString();
+        assertTrue(printed.contains("Here are the matching tasks in your list:"));
+        assertTrue(printed.contains("1.[T][ ] Read book"));
+        assertTrue(printed.contains("3.[T][ ] Return BOOK"));
+        assertFalse(printed.contains("2.[T][ ] Buy milk"));
+    }
+
+    @Test
+    void printTasksContaining_noMatches_reportsNoMatchingTasks() {
+        TaskList tasks = new TaskList(1);
+        tasks.add("Buy milk");
+
+        tasks.printTasksContaining("book");
+
+        assertTrue(output.toString().contains("There are no matching tasks in your list."));
+    }
 }

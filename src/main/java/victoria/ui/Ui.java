@@ -77,6 +77,7 @@ public class Ui {
         System.out.println(">> event <description> /from <date> /to <date> (yyyy-MM-dd)");
         System.out.println(">> list                     VIEW TASKS");
         System.out.println(">> list on <date> (yyyy-MM-dd) VIEW DEADLINES/EVENTS");
+        System.out.println(">> find <keyword>          SEARCH TASK DESCRIPTIONS");
         System.out.println(">> mark <number>            COMPLETE TASK");
         System.out.println(">> unmark <number>          RESTORE TASK");
         System.out.println(">> delete <number>          REMOVE TASK");
