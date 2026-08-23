@@ -1,3 +1,5 @@
+package victoria.storage;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -6,6 +8,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 import java.util.List;
+
+import victoria.model.Deadline;
+import victoria.model.Event;
+import victoria.model.Task;
+import victoria.model.TaskList;
+import victoria.model.Todo;
 
 /** Reads and writes the task list in a small, human-independent persistence format. */
 public final class TaskFile {

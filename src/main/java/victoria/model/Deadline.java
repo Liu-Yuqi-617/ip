@@ -1,7 +1,11 @@
+package victoria.model;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
+
+import victoria.exception.InvalidDeadlineException;
 
 /** A task that must be completed by a supplied date. */
 public class Deadline extends Task {

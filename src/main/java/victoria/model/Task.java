@@ -1,3 +1,5 @@
+package victoria.model;
+
 /** Base class for a task and its completion status. */
 public abstract class Task {
     private final String description;

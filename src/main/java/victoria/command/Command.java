@@ -1,3 +1,8 @@
+package victoria.command;
+
+import victoria.model.TaskList;
+import victoria.ui.Ui;
+
 /** Represents one executable user command. */
 public abstract class Command {
     /** Executes this command against the current application state. */

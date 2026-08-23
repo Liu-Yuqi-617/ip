@@ -1,7 +1,11 @@
+package victoria.model;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
+
+import victoria.exception.InvalidEventException;
 
 /** A task with supplied start and end dates. */
 public class Event extends Task {

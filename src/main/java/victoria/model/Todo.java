@@ -1,3 +1,5 @@
+package victoria.model;
+
 /** A task without date or time information. */
 public class Todo extends Task {
     /** Creates an unfinished ToDo. */
