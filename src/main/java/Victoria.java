@@ -144,7 +144,7 @@ public class Victoria {
         addParsedTask(tasks, new Todo(description));
     }
 
-    /** Parses the slash-delimited date/time portion of a deadline or event command. */
+    /** Parses the slash-delimited date or date/time portion of a deadline or event command. */
     private static void addTimedTask(TaskList tasks, String command, boolean event, String marker) {
         int markerIndex = command.indexOf(marker);
 
@@ -203,7 +203,7 @@ public class Victoria {
 
         System.out.println(">> AVAILABLE COMMANDS");
         System.out.println(">> todo <description>       CREATE TASK");
-        System.out.println(">> deadline ...             SET DEADLINE");
+        System.out.println(">> deadline <description> /by <date> (yyyy-MM-dd)");
         System.out.println(">> event ...                CREATE EVENT");
         System.out.println(">> list                     VIEW TASKS");
         System.out.println(">> mark <number>            COMPLETE TASK");
