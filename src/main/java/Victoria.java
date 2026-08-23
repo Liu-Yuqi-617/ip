@@ -20,10 +20,6 @@ public class Victoria {
         if (args.length == 0) {
             printBootSequence(banner);
             System.out.println(HORIZONTAL_LINE);
-            printAnimatedLine("[ VICTORIA TASK SYSTEM ]", 6);
-            printAnimatedLine("> Welcome back, task champion.", 6);
-            printAnimatedLine("> Your next achievement is waiting.", 6);
-            System.out.println(HORIZONTAL_LINE);
             System.out.println(prompt);
             System.out.println(HORIZONTAL_LINE);
             printCommandFormat();
@@ -31,7 +27,37 @@ public class Victoria {
         }
 
         Scanner scanner = new Scanner(System.in);
-        runCommandLoop(scanner, farewell, new TaskList(MAX_TASKS));
+        TaskList tasks = new TaskList(MAX_TASKS);
+        TaskFile.LoadResult loadResult = TaskFile.loadInto(tasks);
+        if (args.length == 0) {
+            printLoadResult(loadResult, tasks);
+        }
+        runCommandLoop(scanner, farewell, tasks);
+    }
+
+    /** Reports whether startup task loading succeeded, was empty, or failed. */
+    private static void printLoadResult(TaskFile.LoadResult result, TaskList tasks) {
+        switch (result.status()) {
+        case LOADED:
+            System.out.println("Loaded tasks from disk:");
+            tasks.printTasks();
+            break;
+        case NO_FILE:
+            System.out.println("No saved task file found. Starting with an empty task list.");
+            break;
+        case EMPTY:
+            System.out.println("The saved task file is empty. Starting with an empty task list.");
+            break;
+        case NO_VALID_RECORDS:
+            System.out.println("No valid tasks found in the saved file. Starting with an empty task list.");
+            break;
+        case ERROR:
+            System.out.println("Could not read the saved task file. Starting with an empty task list.");
+            break;
+        default:
+            throw new IllegalStateException("Unknown load status: " + result.status());
+        }
+        System.out.println(HORIZONTAL_LINE);
     }
 
     /** Prints the cyber-style startup sequence before the command prompt. */
@@ -102,6 +128,8 @@ public class Victoria {
                     throw new InvalidCommandException(
                             "I don't recognize that command. Try a standard command format.");
                 }
+
+                TaskFile.save(tasks);
 
             } catch (VictoriaException exception) {
                 System.out.println(" Oops! " + exception.getMessage());

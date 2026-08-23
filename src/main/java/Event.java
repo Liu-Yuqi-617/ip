@@ -9,6 +9,12 @@ public class Event extends Task {
         this.to = to;
     }
 
+    /** Returns the event start text entered by the user. */
+    public String getFrom() { return from; }
+
+    /** Returns the event end text entered by the user. */
+    public String getTo() { return to; }
+
     @Override
     protected String getTypeMarker() {
         return "[E]";
