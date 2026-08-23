@@ -3,6 +3,9 @@
 Run from the repository root with `python test-ui/scripts/run_ui_tests.py test/ui-test-plan.md`.
 Commands are run by the system shell. Console output includes both stdout and stderr.
 
+The UI runner clears `data/victoria.txt` before each case so cases remain independent.
+The save case below verifies that adding a task creates the data file.
+
 ## ToDo and list
 
 ### Aim

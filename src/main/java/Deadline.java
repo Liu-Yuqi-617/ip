@@ -7,6 +7,9 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /** Returns the deadline text entered by the user. */
+    public String getBy() { return by; }
+
     @Override
     protected String getTypeMarker() {
         return "[D]";

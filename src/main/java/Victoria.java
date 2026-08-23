@@ -20,10 +20,6 @@ public class Victoria {
         if (args.length == 0) {
             printBootSequence(banner);
             System.out.println(HORIZONTAL_LINE);
-            printAnimatedLine("[ VICTORIA TASK SYSTEM ]", 6);
-            printAnimatedLine("> Welcome back, task champion.", 6);
-            printAnimatedLine("> Your next achievement is waiting.", 6);
-            System.out.println(HORIZONTAL_LINE);
             System.out.println(prompt);
             System.out.println(HORIZONTAL_LINE);
             printCommandFormat();
@@ -31,7 +27,8 @@ public class Victoria {
         }
 
         Scanner scanner = new Scanner(System.in);
-        runCommandLoop(scanner, farewell, new TaskList(MAX_TASKS));
+        TaskList tasks = new TaskList(MAX_TASKS);
+        runCommandLoop(scanner, farewell, tasks);
     }
 
     /** Prints the cyber-style startup sequence before the command prompt. */
@@ -102,6 +99,8 @@ public class Victoria {
                     throw new InvalidCommandException(
                             "I don't recognize that command. Try a standard command format.");
                 }
+
+                TaskFile.save(tasks);
 
             } catch (VictoriaException exception) {
                 System.out.println(" Oops! " + exception.getMessage());
