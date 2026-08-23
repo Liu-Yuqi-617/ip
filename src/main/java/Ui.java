@@ -1,0 +1,91 @@
+/** Handles all console output that is part of Victoria's user interface. */
+public class Ui {
+    private static final String HORIZONTAL_LINE = "____________________________________________________________";
+
+    /** Prints the startup screen shown during a normal launch. */
+    public void showWelcome() {
+        String banner = "██╗   ██╗██╗ ██████╗████████╗ ██████╗ ██████╗ ██╗ █████╗ \n"
+                + "██║   ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██║██╔══██╗\n"
+                + "██║   ██║██║██║        ██║   ██║   ██║██████╔╝██║███████║\n"
+                + "╚██╗ ██╔╝██║██║        ██║   ██║   ██║██╔══██╗██║██╔══██║\n"
+                + " ╚████╔╝ ██║╚██████╗   ██║   ╚██████╔╝██║  ██║██║██║  ██║\n"
+                + "  ╚═══╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝\n";
+        printAnimatedLine("> Initializing VICTORIA...", 10);
+        printAnimatedLine("> Loading task memory...", 10);
+        printAnimatedLine("> Status: ONLINE", 10);
+        System.out.println();
+        printAnimatedLine(banner, 1);
+        printSeparator();
+        System.out.println("Anything new today? I'm all ears!");
+        printSeparator();
+        printCommandFormat();
+        printSeparator();
+    }
+
+    /** Prints the outcome of loading saved tasks. */
+    public void showLoadResult(TaskFile.LoadResult result, TaskList tasks) {
+        switch (result.status()) {
+        case LOADED:
+            System.out.println("Loaded tasks from disk:");
+            tasks.printTasks();
+            break;
+        case NO_FILE:
+            System.out.println("No saved task file found. Starting with an empty task list.");
+            break;
+        case EMPTY:
+            System.out.println("The saved task file is empty. Starting with an empty task list.");
+            break;
+        case NO_VALID_RECORDS:
+            System.out.println("No valid tasks found in the saved file. Starting with an empty task list.");
+            break;
+        case ERROR:
+            System.out.println("Could not read the saved task file. Starting with an empty task list.");
+            break;
+        default:
+            throw new IllegalStateException("Unknown load status: " + result.status());
+        }
+        printSeparator();
+    }
+
+    /** Prints the separator used between interactive commands. */
+    public void printSeparator() {
+        System.out.println(HORIZONTAL_LINE);
+    }
+
+    /** Prints a user-facing command error without exposing implementation details. */
+    public void showError(VictoriaException exception) {
+        System.out.println(" Oops! " + exception.getMessage());
+    }
+
+    /** Prints the command grammar shown before input is accepted. */
+    private void printCommandFormat() {
+        System.out.println(">> AVAILABLE COMMANDS");
+        System.out.println(">> todo <description>       CREATE TASK");
+        System.out.println(">> deadline <description> /by <date> (yyyy-MM-dd)");
+        System.out.println(">> event <description> /from <date> /to <date> (yyyy-MM-dd)");
+        System.out.println(">> list                     VIEW TASKS");
+        System.out.println(">> list on <date> (yyyy-MM-dd) VIEW DEADLINES/EVENTS");
+        System.out.println(">> mark <number>            COMPLETE TASK");
+        System.out.println(">> unmark <number>          RESTORE TASK");
+        System.out.println(">> delete <number>          REMOVE TASK");
+        System.out.println();
+        System.out.println(">> SYSTEM READY");
+    }
+
+    private void printAnimatedLine(String text, long delayMilliseconds) {
+        for (char character : text.toCharArray()) {
+            System.out.print(character);
+            System.out.flush();
+            pause(delayMilliseconds);
+        }
+        System.out.println();
+    }
+
+    private void pause(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
