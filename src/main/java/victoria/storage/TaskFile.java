@@ -138,7 +138,9 @@ public final class TaskFile {
         }
         StringBuilder result = new StringBuilder(type).append('|').append(task.isDone() ? '1' : '0')
                 .append('|').append(encode(task.getDescription()));
-        for (String value : extra) result.append('|').append(encode(value));
+        for (String value : extra) {
+            result.append('|').append(encode(value));
+        }
         return result.toString();
     }
 

@@ -23,7 +23,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -60,7 +60,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -96,7 +96,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -129,7 +129,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -175,7 +175,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -204,7 +204,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -233,7 +233,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -264,7 +264,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -300,7 +300,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -338,7 +338,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
@@ -367,7 +367,7 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output

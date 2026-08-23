@@ -1,3 +1,5 @@
+package victoria;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -9,7 +11,6 @@ import victoria.exception.EmptyDescriptionException;
 import victoria.exception.InvalidCommandException;
 import victoria.exception.InvalidDeadlineException;
 import victoria.exception.InvalidEventException;
-import victoria.exception.InvalidTaskNumberException;
 import victoria.exception.TaskListFullException;
 import victoria.exception.VictoriaException;
 import victoria.model.Deadline;
@@ -118,7 +119,7 @@ public class Victoria {
             if (event) {
                 throw new InvalidEventException("The event is missing /from <start>.");
             }
-                throw new InvalidDeadlineException("The deadline is missing /by <date/time>.");
+            throw new InvalidDeadlineException("The deadline is missing /by <date/time>.");
         }
         String description = command.substring(0, markerIndex).trim();
         if (description.isBlank()) {
@@ -176,7 +177,7 @@ public class Victoria {
         String commandName = done ? "mark " : "unmark ";
         int taskNumber = Integer.parseInt(command.substring(commandName.length()).trim());
         Task task = tasks.getTask(taskNumber);
-            if (task == null) {
+        if (task == null) {
                 System.out.println(" Oops! Task number is invalid.");
             } else if (done && task.isDone()) {
                 System.out.println(" Hurray! This task is already done:");

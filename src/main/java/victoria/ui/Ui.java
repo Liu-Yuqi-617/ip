@@ -1,7 +1,7 @@
 package victoria.ui;
 
-import victoria.model.TaskList;
 import victoria.exception.VictoriaException;
+import victoria.model.TaskList;
 import victoria.storage.TaskFile;
 
 /** Handles all console output that is part of Victoria's user interface. */
