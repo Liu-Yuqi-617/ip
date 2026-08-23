@@ -26,6 +26,7 @@ import victoria.ui.Ui;
 public class Victoria {
     private static final int MAX_TASKS = 100;
 
+    /** Starts Victoria, restores saved tasks, and begins reading commands. */
     public static void main(String[] args) {
         Ui ui = new Ui();
 
@@ -47,6 +48,7 @@ public class Victoria {
      *
      * @param scanner  source of commands entered by the user
      * @param tasks    in-memory storage for the user's tasks
+     * @param ui       console output helper
      */
     private static void runCommandLoop(Scanner scanner, TaskList tasks, Ui ui) {
 

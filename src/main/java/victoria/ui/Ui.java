@@ -84,6 +84,7 @@ public class Ui {
         System.out.println(">> SYSTEM READY");
     }
 
+    /** Prints text one character at a time to create the startup animation. */
     private void printAnimatedLine(String text, long delayMilliseconds) {
         for (char character : text.toCharArray()) {
             System.out.print(character);
@@ -93,6 +94,7 @@ public class Ui {
         System.out.println();
     }
 
+    /** Pauses between animated characters without losing interruption status. */
     private void pause(long milliseconds) {
         try {
             Thread.sleep(milliseconds);

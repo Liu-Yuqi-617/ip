@@ -30,6 +30,7 @@ public class Deadline extends Task {
     /** Returns the date on which this deadline occurs. */
     public LocalDate getDate() { return by; }
 
+    /** Parses an ISO date or throws a user-facing deadline error. */
     private static LocalDate parseDate(String value) {
         try {
             return LocalDate.parse(value, DateTimeFormatter.ofPattern("uuuu-MM-dd"));
@@ -38,11 +39,13 @@ public class Deadline extends Task {
         }
     }
 
+    /** Returns the marker identifying this task as a deadline. */
     @Override
     protected String getTypeMarker() {
         return "[D]";
     }
 
+    /** Returns the formatted deadline text displayed after the description. */
     @Override
     protected String getTimingText() {
         return " (by: " + by.format(OUTPUT_FORMAT) + ")";

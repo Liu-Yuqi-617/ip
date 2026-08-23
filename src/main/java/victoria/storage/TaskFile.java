@@ -19,6 +19,7 @@ import victoria.model.Todo;
 public final class TaskFile {
     private static final Path FILE = Paths.get("data", "victoria.txt");
 
+    /** Prevents construction because this class exposes only static operations. */
     private TaskFile() { }
 
     /** Describes the outcome of loading the task file. */
@@ -57,6 +58,7 @@ public final class TaskFile {
                 loadedTasks);
     }
 
+    /** Returns whether the persistence file contains no bytes. */
     private static boolean linesAreEmpty(Path file) {
         try {
             return Files.size(file) == 0;
@@ -89,6 +91,7 @@ public final class TaskFile {
         }
     }
 
+    /** Parses one record and appends it when the record is valid. */
     private static boolean loadLine(TaskList tasks, String line) {
         if (line == null || line.isBlank()) {
             return false;
@@ -119,6 +122,7 @@ public final class TaskFile {
         }
     }
 
+    /** Encodes a task and its type-specific fields as one persistence record. */
     private static String encode(Task task) {
         String type;
         String[] extra;
@@ -138,10 +142,12 @@ public final class TaskFile {
         return result.toString();
     }
 
+    /** Encodes text as Base64 so delimiters cannot corrupt a stored record. */
     private static String encode(String value) {
         return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
     }
 
+    /** Decodes one Base64 persistence field back into user text. */
     private static String decode(String value) {
         return new String(Base64.getDecoder().decode(value), StandardCharsets.UTF_8);
     }

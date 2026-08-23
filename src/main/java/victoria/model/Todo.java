@@ -7,11 +7,13 @@ public class Todo extends Task {
         super(description);
     }
 
+    /** Returns the marker identifying this task as a ToDo. */
     @Override
     protected String getTypeMarker() {
         return "[T]";
     }
 
+    /** Returns no timing text because a ToDo has no date. */
     @Override
     protected String getTimingText() {
         return "";

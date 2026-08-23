@@ -31,6 +31,7 @@ public class Event extends Task {
     /** Returns the event end date. */
     public LocalDate getEndDate() { return to; }
 
+    /** Parses an ISO date or throws a user-facing event error. */
     private static LocalDate parseDate(String value) {
         try {
             return LocalDate.parse(value, DateTimeFormatter.ofPattern("uuuu-MM-dd"));
@@ -39,11 +40,13 @@ public class Event extends Task {
         }
     }
 
+    /** Returns the marker identifying this task as an event. */
     @Override
     protected String getTypeMarker() {
         return "[E]";
     }
 
+    /** Returns the formatted event range displayed after the description. */
     @Override
     protected String getTimingText() {
         return " (from: " + from.format(OUTPUT_FORMAT) + " to: " + to.format(OUTPUT_FORMAT) + ")";
