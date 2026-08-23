@@ -23,3 +23,29 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Building and running the fat JAR
+
+This project uses the [Shadow Gradle plugin](https://github.com/GradleUp/shadow) to package the application classes and their dependencies into one executable JAR.
+
+From the project root, use JDK 25 and run:
+
+```text
+gradlew.bat clean shadowJar
+```
+
+On macOS or Linux, use `./gradlew clean shadowJar` instead. The generated fat JAR is placed at `build/libs/duke.jar`. The `build/` directory is ignored by Git, so the generated binary is not committed.
+
+Run the JAR with:
+
+```text
+java -jar build/libs/duke.jar
+```
+
+On Windows, the equivalent path uses backslashes:
+
+```text
+java -jar build\libs\duke.jar
+```
+
+To distribute the JAR, create a release in your fork on GitHub, use a version such as `v0.1`, and attach `build/libs/duke.jar` under **Attach binaries by dropping them here**. Do not add the JAR to a commit.

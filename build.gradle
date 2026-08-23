@@ -48,7 +48,11 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'duke.jar'
+    // Package the application entry point into the executable fat JAR.
+    manifest {
+        attributes 'Main-Class': application.mainClass.get()
+    }
+    archiveFileName = 'victoria.jar'
 }
 
 run {
