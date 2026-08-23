@@ -57,6 +57,12 @@ public class Ui {
         System.out.println(" Oops! " + exception.getMessage());
     }
 
+    /** Prints the message shown when the session ends. */
+    public void showFarewell() {
+        System.out.println("Bye! Always nice to chat with you. See you soon!");
+        printSeparator();
+    }
+
     /** Prints the command grammar shown before input is accepted. */
     private void printCommandFormat() {
         System.out.println(">> AVAILABLE COMMANDS");

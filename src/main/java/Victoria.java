@@ -10,7 +10,6 @@ public class Victoria {
     private static final int MAX_TASKS = 100;
 
     public static void main(String[] args) {
-        String farewell = "Bye! Always nice to chat with you. See you soon!";
         Ui ui = new Ui();
 
         if (args.length == 0) {
@@ -23,17 +22,16 @@ public class Victoria {
         if (args.length == 0) {
             ui.showLoadResult(loadResult, tasks);
         }
-        runCommandLoop(scanner, farewell, tasks, ui);
+        runCommandLoop(scanner, tasks, ui);
     }
 
     /**
      * Reads and echoes commands until the user enters the exit command "bye".
      *
      * @param scanner  source of commands entered by the user
-     * @param farewell message printed before the program exits
      * @param tasks    in-memory storage for the user's tasks
      */
-    private static void runCommandLoop(Scanner scanner, String farewell, TaskList tasks, Ui ui) {
+    private static void runCommandLoop(Scanner scanner, TaskList tasks, Ui ui) {
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
@@ -41,8 +39,8 @@ public class Victoria {
 
             try {
                 if (normalizedCommand.equals("bye")) {
-                    System.out.println(farewell);
-                    ui.printSeparator();
+                    Command exitCommand = new ExitCommand();
+                    exitCommand.execute(tasks, ui);
                     break;
                 }
 
