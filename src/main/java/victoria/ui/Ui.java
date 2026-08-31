@@ -10,22 +10,26 @@ public class Ui {
 
     /** Prints the startup screen shown during a normal launch. */
     public void showWelcome() {
-        String banner = "██╗   ██╗██╗ ██████╗████████╗ ██████╗ ██████╗ ██╗ █████╗ \n"
-                + "██║   ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██║██╔══██╗\n"
-                + "██║   ██║██║██║        ██║   ██║   ██║██████╔╝██║███████║\n"
-                + "╚██╗ ██╔╝██║██║        ██║   ██║   ██║██╔══██╗██║██╔══██║\n"
-                + " ╚████╔╝ ██║╚██████╗   ██║   ╚██████╔╝██║  ██║██║██║  ██║\n"
-                + "  ╚═══╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝\n";
         printAnimatedLine("> Initializing VICTORIA...", 10);
         printAnimatedLine("> Loading task memory...", 10);
         printAnimatedLine("> Status: ONLINE", 10);
         System.out.println();
-        printAnimatedLine(banner, 1);
+        printAnimatedLine(getBanner(), 1);
         printSeparator();
         System.out.println("Anything new today? I'm all ears!");
         printSeparator();
         printCommandFormat();
         printSeparator();
+    }
+
+    /** Returns the welcome text shown immediately in the graphical user interface. */
+    public static String getGreetingMessage() {
+        return getBanner()
+                + HORIZONTAL_LINE + "\n"
+                + "Anything new today? I'm all ears!\n"
+                + HORIZONTAL_LINE + "\n"
+                + getCommandFormat()
+                + HORIZONTAL_LINE;
     }
 
     /** Prints the outcome of loading saved tasks. */
@@ -71,18 +75,32 @@ public class Ui {
 
     /** Prints the command grammar shown before input is accepted. */
     private void printCommandFormat() {
-        System.out.println(">> AVAILABLE COMMANDS");
-        System.out.println(">> todo <description>       CREATE TASK");
-        System.out.println(">> deadline <description> /by <date> (yyyy-MM-dd)");
-        System.out.println(">> event <description> /from <date> /to <date> (yyyy-MM-dd)");
-        System.out.println(">> list                     VIEW TASKS");
-        System.out.println(">> list on <date> (yyyy-MM-dd) VIEW DEADLINES/EVENTS");
-        System.out.println(">> find <keyword>          SEARCH TASK DESCRIPTIONS");
-        System.out.println(">> mark <number>            COMPLETE TASK");
-        System.out.println(">> unmark <number>          RESTORE TASK");
-        System.out.println(">> delete <number>          REMOVE TASK");
-        System.out.println();
-        System.out.println(">> SYSTEM READY");
+        System.out.print(getCommandFormat());
+    }
+
+    /** Returns the command reference shown when Victoria starts. */
+    private static String getCommandFormat() {
+        return ">> AVAILABLE COMMANDS\n"
+                + ">> todo <description>       CREATE TASK\n"
+                + ">> deadline <description> /by <date> (yyyy-MM-dd)\n"
+                + ">> event <description> /from <date> /to <date> (yyyy-MM-dd)\n"
+                + ">> list                     VIEW TASKS\n"
+                + ">> list on <date> (yyyy-MM-dd) VIEW DEADLINES/EVENTS\n"
+                + ">> find <keyword>          SEARCH TASK DESCRIPTIONS\n"
+                + ">> mark <number>            COMPLETE TASK\n"
+                + ">> unmark <number>          RESTORE TASK\n"
+                + ">> delete <number>          REMOVE TASK\n\n"
+                + ">> SYSTEM READY\n";
+    }
+
+    /** Returns Victoria's text banner. */
+    private static String getBanner() {
+        return "██╗   ██╗██╗ ██████╗████████╗ ██████╗ ██████╗ ██╗ █████╗ \n"
+                + "██║   ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██║██╔══██╗\n"
+                + "██║   ██║██║██║        ██║   ██║   ██║██████╔╝██║███████║\n"
+                + "╚██╗ ██╔╝██║██║        ██║   ██║   ██║██╔══██╗██║██╔══██║\n"
+                + " ╚████╔╝ ██║╚██████╗   ██║   ╚████╔╝██║  ██║██║██║██║  ██║\n"
+                + "  ╚═══╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝\n";
     }
 
     /** Prints text one character at a time to create the startup animation. */

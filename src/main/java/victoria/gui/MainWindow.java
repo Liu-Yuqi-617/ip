@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import victoria.Victoria;
+import victoria.ui.Ui;
 
 /** Controls the chat window used to send commands to Victoria. */
 public class MainWindow extends AnchorPane {
@@ -29,7 +30,7 @@ public class MainWindow extends AnchorPane {
     /** Supplies the task application that executes the user's commands. */
     public void setVictoria(Victoria victoria) {
         this.victoria = victoria;
-        addVictoriaDialog("Welcome to Victoria! Enter a command such as 'list' or 'todo read book'.");
+        addVictoriaDialog(Ui.getGreetingMessage());
     }
 
     /** Sends the text field's command and shows Victoria's reply. */
