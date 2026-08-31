@@ -1,5 +1,8 @@
 package victoria;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -26,22 +29,49 @@ import victoria.ui.Ui;
  */
 public class Victoria {
     private static final int MAX_TASKS = 100;
+    private final TaskList tasks;
+    private final Ui ui;
+    private final TaskFile.LoadResult loadResult;
+
+    /** Creates Victoria and restores any saved tasks. */
+    public Victoria() {
+        tasks = new TaskList(MAX_TASKS);
+        ui = new Ui();
+        loadResult = TaskFile.loadInto(tasks);
+    }
 
     /** Starts Victoria, restores saved tasks, and begins reading commands. */
     public static void main(String[] args) {
-        Ui ui = new Ui();
+        Victoria victoria = new Victoria();
 
         if (args.length == 0) {
-            ui.showWelcome();
+            victoria.ui.showWelcome();
         }
 
         Scanner scanner = new Scanner(System.in);
-        TaskList tasks = new TaskList(MAX_TASKS);
-        TaskFile.LoadResult loadResult = TaskFile.loadInto(tasks);
         if (args.length == 0) {
-            ui.showLoadResult(loadResult, tasks);
+            victoria.ui.showLoadResult(victoria.loadResult, victoria.tasks);
         }
-        runCommandLoop(scanner, tasks, ui);
+        victoria.runCommandLoop(scanner);
+    }
+
+    /** Returns the outcome of restoring tasks during construction. */
+    public TaskFile.LoadResult getLoadResult() {
+        return loadResult;
+    }
+
+    /** Executes one command and returns the text that should be shown to the user. */
+    public synchronized CommandResult executeCommand(String command) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        PrintStream originalOutput = System.out;
+        boolean shouldExit = false;
+        try (PrintStream capturedOutput = new PrintStream(output, true, StandardCharsets.UTF_8)) {
+            System.setOut(capturedOutput);
+            shouldExit = executeCommandInternal(command);
+        } finally {
+            System.setOut(originalOutput);
+        }
+        return new CommandResult(output.toString(StandardCharsets.UTF_8), shouldExit);
     }
 
     /**
@@ -51,53 +81,64 @@ public class Victoria {
      * @param tasks    in-memory storage for the user's tasks
      * @param ui       console output helper
      */
-    private static void runCommandLoop(Scanner scanner, TaskList tasks, Ui ui) {
+    private void runCommandLoop(Scanner scanner) {
 
         while (scanner.hasNextLine()) {
-            String command = scanner.nextLine();
-            String normalizedCommand = command.trim();
-
-            try {
-                if (normalizedCommand.equals("bye")) {
-                    Command exitCommand = new ExitCommand();
-                    exitCommand.execute(tasks, ui);
-                    break;
-                }
-
-                if (normalizedCommand.equals("list")) {
-                    tasks.printTasks();
-                } else if (normalizedCommand.startsWith("list on ")) {
-                    printTasksOnDate(tasks, normalizedCommand.substring(8).trim());
-                } else if (normalizedCommand.startsWith("find ")) {
-                    findTasks(tasks, normalizedCommand.substring(5).trim());
-                } else if (normalizedCommand.equals("todo")) {
-                    throw new EmptyDescriptionException("The description of a task cannot be empty.");
-                } else if (normalizedCommand.startsWith("todo ")) {
-                    addTask(tasks, normalizedCommand.substring(5));
-                } else if (normalizedCommand.startsWith("deadline ")) {
-                    addTimedTask(tasks, normalizedCommand.substring(9), false, "/by ");
-                } else if (normalizedCommand.startsWith("event ")) {
-                    addTimedTask(tasks, normalizedCommand.substring(5), true, "/from ");
-                } else if (isStatusCommand(normalizedCommand, "mark")) {
-                    changeTaskStatus(normalizedCommand, tasks, true);
-                } else if (isStatusCommand(normalizedCommand, "unmark")) {
-                    changeTaskStatus(normalizedCommand, tasks, false);
-                } else if (isStatusCommand(normalizedCommand, "delete")) {
-                    deleteTask(normalizedCommand, tasks);
-                } else {
-                    throw new InvalidCommandException(
-                            "I don't recognize that command. Try a standard command format.");
-                }
-
-                TaskFile.save(tasks);
-
-            } catch (VictoriaException exception) {
-                ui.showError(exception);
+            CommandResult result = executeCommand(scanner.nextLine());
+            System.out.print(result.response());
+            if (result.shouldExit()) {
+                break;
             }
-
-            ui.printSeparator();
         }
     }
+
+    /** Processes a command against the current task list. */
+    private boolean executeCommandInternal(String command) {
+        String normalizedCommand = command.trim();
+
+        try {
+            if (normalizedCommand.equals("bye")) {
+                Command exitCommand = new ExitCommand();
+                exitCommand.execute(tasks, ui);
+                return true;
+            }
+
+            if (normalizedCommand.equals("list")) {
+                tasks.printTasks();
+            } else if (normalizedCommand.startsWith("list on ")) {
+                printTasksOnDate(tasks, normalizedCommand.substring(8).trim());
+            } else if (normalizedCommand.startsWith("find ")) {
+                findTasks(tasks, normalizedCommand.substring(5).trim());
+            } else if (normalizedCommand.equals("todo")) {
+                throw new EmptyDescriptionException("The description of a task cannot be empty.");
+            } else if (normalizedCommand.startsWith("todo ")) {
+                addTask(tasks, normalizedCommand.substring(5));
+            } else if (normalizedCommand.startsWith("deadline ")) {
+                addTimedTask(tasks, normalizedCommand.substring(9), false, "/by ");
+            } else if (normalizedCommand.startsWith("event ")) {
+                addTimedTask(tasks, normalizedCommand.substring(5), true, "/from ");
+            } else if (isStatusCommand(normalizedCommand, "mark")) {
+                changeTaskStatus(normalizedCommand, tasks, true);
+            } else if (isStatusCommand(normalizedCommand, "unmark")) {
+                changeTaskStatus(normalizedCommand, tasks, false);
+            } else if (isStatusCommand(normalizedCommand, "delete")) {
+                deleteTask(normalizedCommand, tasks);
+            } else {
+                throw new InvalidCommandException("I don't recognize that command. Try a standard command format.");
+            }
+
+            TaskFile.save(tasks);
+
+        } catch (VictoriaException exception) {
+            ui.showError(exception);
+        }
+
+        ui.printSeparator();
+        return false;
+    }
+
+    /** Contains the reply to one command and whether it ended the session. */
+    public record CommandResult(String response, boolean shouldExit) { }
 
     /** Adds a task without date/time text. */
     private static void addTask(TaskList tasks, String description) {
