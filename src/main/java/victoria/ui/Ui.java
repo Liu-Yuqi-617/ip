@@ -81,7 +81,7 @@ public class Ui {
     /** Returns the command reference shown when Victoria starts. */
     private static String getCommandFormat() {
         return ">> AVAILABLE COMMANDS\n"
-                + ">> todo <description>       CREATE TASK\n"
+                + ">> todo <description>       CREATE A TASK\n"
                 + ">> deadline <description> /by <date> (yyyy-MM-dd)\n"
                 + ">> event <description> /from <date> /to <date> (yyyy-MM-dd)\n"
                 + ">> list                     VIEW TASKS\n"
