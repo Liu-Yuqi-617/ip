@@ -2,8 +2,8 @@ package victoria.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.time.LocalDate;
+import java.util.Locale;
 
 /** Stores and updates the tasks belonging to the user. */
 public class TaskList {
@@ -35,6 +35,7 @@ public class TaskList {
             return false;
         }
         tasks.add(task);
+        assert tasks.size() <= capacity : "Adding a task must not exceed the list capacity";
         return true;
     }
 

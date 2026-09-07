@@ -76,7 +76,9 @@ public final class TaskFile {
             Files.createDirectories(FILE.getParent());
             StringBuilder contents = new StringBuilder();
             for (int i = 1; i <= tasks.size(); i++) {
-                contents.append(encode(tasks.getTask(i))).append(System.lineSeparator());
+                Task task = tasks.getTask(i);
+                assert task != null : "Every task number in the list must refer to a task";
+                contents.append(encode(task)).append(System.lineSeparator());
             }
             Path temporaryFile = FILE.resolveSibling(FILE.getFileName() + ".tmp");
             Files.writeString(temporaryFile, contents.toString(), StandardCharsets.UTF_8);
@@ -112,10 +114,14 @@ public final class TaskFile {
             } else {
                 return false;
             }
-            if (tasks.add(task) && fields[1].equals("1")) {
+            int originalSize = tasks.size();
+            boolean wasAdded = tasks.add(task);
+            if (wasAdded && fields[1].equals("1")) {
                 task.markDone();
             }
-            return tasks.getTask(tasks.size()) == task;
+            assert tasks.size() == originalSize + (wasAdded ? 1 : 0)
+                    : "Loading one record must add exactly one task or none";
+            return wasAdded;
         } catch (IllegalArgumentException exception) {
             // Skip malformed Base64 or otherwise corrupted records.
             return false;
