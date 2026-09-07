@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 /** Represents one chat message with its speaker image. */
 public class DialogBox extends HBox {
@@ -30,6 +32,9 @@ public class DialogBox extends HBox {
             throw new IllegalStateException("Unable to load a chat dialog.", exception);
         }
         dialog.setText(text);
+        dialog.setMinHeight(Region.USE_PREF_SIZE);
+        dialog.setMaxHeight(Double.MAX_VALUE);
+        HBox.setHgrow(dialog, Priority.ALWAYS);
         displayPicture.setImage(image);
     }
 

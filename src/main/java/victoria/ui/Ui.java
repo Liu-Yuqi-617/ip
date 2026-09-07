@@ -48,6 +48,10 @@ public class Ui {
         case NO_VALID_RECORDS:
             System.out.println("No valid tasks found in the saved file. Starting with an empty task list.");
             break;
+        case MIGRATION_ERROR:
+            System.out.println("Tasks were loaded, but could not be moved to Victoria's new data location.");
+            tasks.printTasks();
+            break;
         case ERROR:
             System.out.println("Could not read the saved task file. Starting with an empty task list.");
             break;

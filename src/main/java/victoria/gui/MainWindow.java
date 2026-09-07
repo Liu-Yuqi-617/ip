@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import victoria.Victoria;
+import victoria.storage.TaskFile;
 import victoria.ui.Ui;
 
 /** Controls the chat window used to send commands to Victoria. */
@@ -31,6 +32,18 @@ public class MainWindow extends AnchorPane {
     public void setVictoria(Victoria victoria) {
         this.victoria = victoria;
         addVictoriaDialog(Ui.getGreetingMessage());
+        showSavedTasks();
+    }
+
+    /** Shows tasks restored from disk immediately after the greeting. */
+    private void showSavedTasks() {
+        if (victoria.getLoadResult().status() == TaskFile.LoadStatus.LOADED
+                || victoria.getLoadResult().status() == TaskFile.LoadStatus.MIGRATION_ERROR) {
+            String savedTasks = victoria.executeCommand("list").response().strip();
+            addVictoriaDialog("Welcome back! Here are your saved tasks:\n" + savedTasks);
+        } else if (victoria.getLoadResult().status() == TaskFile.LoadStatus.ERROR) {
+            addVictoriaDialog("I couldn't read your saved tasks. Starting with an empty list.");
+        }
     }
 
     /** Sends the text field's command and shows Victoria's reply. */
@@ -43,6 +56,9 @@ public class MainWindow extends AnchorPane {
         addUserDialog(input);
         Victoria.CommandResult result = victoria.executeCommand(input);
         addVictoriaDialog(result.response().strip());
+        if (input.trim().matches("delete\\s+\\d+")) {
+            addVictoriaDialog(victoria.executeCommand("list").response().strip());
+        }
         userInput.clear();
         if (result.shouldExit()) {
             userInput.setDisable(true);

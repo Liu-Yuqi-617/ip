@@ -17,31 +17,46 @@ import victoria.model.Todo;
 
 /** Reads and writes the task list in a small, human-independent persistence format. */
 public final class TaskFile {
-    private static final Path FILE = Paths.get("data", "victoria.txt");
+    private static final String DATA_FILE_PROPERTY = "victoria.data.path";
+    private static final boolean HAS_CONFIGURED_PATH = hasConfiguredPath();
+    private static final Path FILE = getDefaultFile();
+    private static final Path LEGACY_FILE = Paths.get("data", "victoria.txt");
 
     /** Prevents construction because this class exposes only static operations. */
     private TaskFile() { }
 
     /** Describes the outcome of loading the task file. */
-    public enum LoadStatus { LOADED, NO_FILE, EMPTY, NO_VALID_RECORDS, ERROR }
+    public enum LoadStatus { LOADED, NO_FILE, EMPTY, NO_VALID_RECORDS, MIGRATION_ERROR, ERROR }
 
     /** Contains both the load outcome and the number of valid tasks restored. */
     public record LoadResult(LoadStatus status, int loadedTasks) { }
 
     /** Loads valid records from disk; a missing or damaged file leaves the list usable. */
     public static LoadResult loadInto(TaskList tasks) {
+        if (!HAS_CONFIGURED_PATH && !Files.exists(FILE) && Files.isRegularFile(LEGACY_FILE)) {
+            LoadResult legacyResult = loadInto(tasks, LEGACY_FILE);
+            if (legacyResult.status() == LoadStatus.LOADED && !save(tasks)) {
+                return new LoadResult(LoadStatus.MIGRATION_ERROR, legacyResult.loadedTasks());
+            }
+            return legacyResult;
+        }
+        return loadInto(tasks, FILE);
+    }
+
+    /** Loads valid records from a supplied file. */
+    static LoadResult loadInto(TaskList tasks, Path file) {
         if (tasks == null) {
             return new LoadResult(LoadStatus.ERROR, 0);
         }
-        if (!Files.exists(FILE)) {
+        if (!Files.exists(file)) {
             return new LoadResult(LoadStatus.NO_FILE, 0);
         }
-        if (!Files.isRegularFile(FILE)) {
+        if (!Files.isRegularFile(file)) {
             return new LoadResult(LoadStatus.ERROR, 0);
         }
         int loadedTasks = 0;
         try {
-            List<String> lines = Files.readAllLines(FILE, StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
             for (String line : lines) {
                 if (loadLine(tasks, line)) {
                     loadedTasks++;
@@ -51,7 +66,7 @@ public final class TaskFile {
             // Persistence must never prevent the chatbot from starting.
             return new LoadResult(LoadStatus.ERROR, loadedTasks);
         }
-        if (linesAreEmpty(FILE)) {
+        if (linesAreEmpty(file)) {
             return new LoadResult(LoadStatus.EMPTY, 0);
         }
         return new LoadResult(loadedTasks > 0 ? LoadStatus.LOADED : LoadStatus.NO_VALID_RECORDS,
@@ -67,30 +82,50 @@ public final class TaskFile {
         }
     }
 
-    /** Saves the complete current list, creating the data directory when necessary. */
-    public static void save(TaskList tasks) {
+    /** Saves the complete current list to the user's Victoria data file. */
+    public static boolean save(TaskList tasks) {
+        return save(tasks, FILE);
+    }
+
+    /** Saves the complete current list to a supplied file. */
+    static boolean save(TaskList tasks, Path file) {
         if (tasks == null) {
-            return;
+            return false;
         }
         try {
-            Files.createDirectories(FILE.getParent());
+            Files.createDirectories(file.getParent());
             StringBuilder contents = new StringBuilder();
             for (int i = 1; i <= tasks.size(); i++) {
                 Task task = tasks.getTask(i);
                 assert task != null : "Every task number in the list must refer to a task";
                 contents.append(encode(task)).append(System.lineSeparator());
             }
-            Path temporaryFile = FILE.resolveSibling(FILE.getFileName() + ".tmp");
+            Path temporaryFile = file.resolveSibling(file.getFileName() + ".tmp");
             Files.writeString(temporaryFile, contents.toString(), StandardCharsets.UTF_8);
             try {
-                Files.move(temporaryFile, FILE, StandardCopyOption.REPLACE_EXISTING,
+                Files.move(temporaryFile, file, StandardCopyOption.REPLACE_EXISTING,
                         StandardCopyOption.ATOMIC_MOVE);
             } catch (IOException exception) {
-                Files.move(temporaryFile, FILE, StandardCopyOption.REPLACE_EXISTING);
+                Files.move(temporaryFile, file, StandardCopyOption.REPLACE_EXISTING);
             }
+            return true;
         } catch (IOException | SecurityException exception) {
-            // Persistence failures do not terminate the chatbot.
+            return false;
         }
+    }
+
+    /** Returns whether a caller has specified a custom data-file location. */
+    private static boolean hasConfiguredPath() {
+        String configuredPath = System.getProperty(DATA_FILE_PROPERTY);
+        return configuredPath != null && !configuredPath.isBlank();
+    }
+
+    /** Returns the stable per-user path used for Victoria task data. */
+    private static Path getDefaultFile() {
+        if (HAS_CONFIGURED_PATH) {
+            return Path.of(System.getProperty(DATA_FILE_PROPERTY));
+        }
+        return Path.of(System.getProperty("user.home"), ".victoria", "victoria.txt");
     }
 
     /** Parses one record and appends it when the record is valid. */

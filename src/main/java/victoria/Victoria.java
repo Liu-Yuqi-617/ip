@@ -129,7 +129,9 @@ public class Victoria {
                 throw new InvalidCommandException("I don't recognize that command. Try a standard command format.");
             }
 
-            TaskFile.save(tasks);
+            if (!TaskFile.save(tasks)) {
+                System.out.println(" Warning: Your task changes could not be saved.");
+            }
 
         } catch (VictoriaException exception) {
             ui.showError(exception);

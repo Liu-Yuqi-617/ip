@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 
@@ -38,35 +39,33 @@ def main() -> int:
     if not cases:
         print(f"No test cases found in {plan_path}.")
         return 1
-    for number, (name, aim, inputs, command, expected) in enumerate(cases, 1):
-        # Each case is isolated; persistence across two launches is tested separately.
-        saved_tasks = Path("data/victoria.txt")
-        if saved_tasks.exists():
-            saved_tasks.unlink()
-        if name == "Load saved tasks":
-            saved_tasks.parent.mkdir(parents=True, exist_ok=True)
-            saved_tasks.write_text("T|1|cGVyc2lzdGVudCB0YXNr\n", encoding="utf-8")
-        if name == "Ignore corrupted records":
-            saved_tasks.parent.mkdir(parents=True, exist_ok=True)
-            saved_tasks.write_text("not a task\nD|0|bad-base64|!!!\nT|0|dmFsaWQgdGFza3M=\n",
-                                   encoding="utf-8")
-        print(f"\n=== Test {number}: {name} ===\nAim: {aim}\n$ {command}")
-        print(f"--- console input ---\n{inputs if inputs else '(none)'}\n--- console output ---")
-        result = subprocess.run(command, input=inputs + ("\n" if inputs else ""), text=True,
-                                capture_output=True, shell=True)
-        actual = result.stdout + result.stderr
-        print(actual, end="" if actual.endswith("\n") else "\n")
-        if normalize(actual) != normalize(expected):
-            print("--- FAILED ---")
-            print(f"Expected:\n{expected}\nActual:\n{actual}")
-            return 1
-        if name == "ToDo and list":
-            saved_tasks = Path("data/victoria.txt")
-            if not saved_tasks.exists() or not saved_tasks.read_text(encoding="utf-8").strip():
+    with tempfile.TemporaryDirectory() as temporary_directory:
+        saved_tasks = Path(temporary_directory) / "victoria.txt"
+        for number, (name, aim, inputs, command, expected) in enumerate(cases, 1):
+            # Each case is isolated and uses temporary task data.
+            if saved_tasks.exists():
+                saved_tasks.unlink()
+            if name == "Load saved tasks":
+                saved_tasks.write_text("T|1|cGVyc2lzdGVudCB0YXNr\n", encoding="utf-8")
+            if name == "Ignore corrupted records":
+                saved_tasks.write_text("not a task\nD|0|bad-base64|!!!\nT|0|dmFsaWQgdGFza3M=\n",
+                                       encoding="utf-8")
+            print(f"\n=== Test {number}: {name} ===\nAim: {aim}\n$ {command}")
+            print(f"--- console input ---\n{inputs if inputs else '(none)'}\n--- console output ---")
+            test_command = command.replace("java ", f"java -Dvictoria.data.path={saved_tasks} ", 1)
+            result = subprocess.run(test_command, input=inputs + ("\n" if inputs else ""), text=True,
+                                    capture_output=True, shell=True)
+            actual = result.stdout + result.stderr
+            print(actual, end="" if actual.endswith("\n") else "\n")
+            if normalize(actual) != normalize(expected):
                 print("--- FAILED ---")
-                print("Expected a non-empty data/victoria.txt after adding a task.")
+                print(f"Expected:\n{expected}\nActual:\n{actual}")
                 return 1
-        print("--- PASSED ---")
+            if name == "ToDo and list" and not saved_tasks.read_text(encoding="utf-8").strip():
+                print("--- FAILED ---")
+                print("Expected a non-empty temporary task file after adding a task.")
+                return 1
+            print("--- PASSED ---")
     print(f"\nAll {len(cases)} UI test(s) passed.")
     return 0
 
