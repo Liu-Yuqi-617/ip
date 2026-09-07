@@ -114,9 +114,9 @@ public class Victoria {
             } else if (normalizedCommand.startsWith("todo ")) {
                 addTask(tasks, normalizedCommand.substring(5));
             } else if (normalizedCommand.startsWith("deadline ")) {
-                addTimedTask(tasks, normalizedCommand.substring(9), false, "/by ");
+                addDeadline(tasks, normalizedCommand.substring(9));
             } else if (normalizedCommand.startsWith("event ")) {
-                addTimedTask(tasks, normalizedCommand.substring(5), true, "/from ");
+                addEvent(tasks, normalizedCommand.substring(5));
             } else if (isStatusCommand(normalizedCommand, "mark")) {
                 changeTaskStatus(normalizedCommand, tasks, true);
             } else if (isStatusCommand(normalizedCommand, "unmark")) {
@@ -162,30 +162,38 @@ public class Victoria {
         tasks.printTasksContaining(keyword);
     }
 
-    /** Parses the slash-delimited date portion of a deadline or event command. */
-    private static void addTimedTask(TaskList tasks, String command, boolean event, String marker) {
-        int markerIndex = command.indexOf(marker);
+    /** Parses the slash-delimited date portion of a deadline command. */
+    private static void addDeadline(TaskList tasks, String command) {
+        int markerIndex = command.indexOf("/by ");
 
         if (markerIndex < 0) {
-            if (event) {
-                throw new InvalidEventException("The event is missing /from <start>.");
-            }
             throw new InvalidDeadlineException("The deadline is missing /by <date/time>.");
         }
         String description = command.substring(0, markerIndex).trim();
         if (description.isBlank()) {
             throw new EmptyDescriptionException("The description of this task cannot be empty.");
         }
-        String dateTime = command.substring(markerIndex + marker.length()).trim();
+        String dateTime = command.substring(markerIndex + "/by ".length()).trim();
         if (dateTime.isBlank()) {
-            if (event) {
-                throw new InvalidEventException("The event date cannot be empty.");
-            }
             throw new InvalidDeadlineException("The deadline date/time cannot be empty.");
         }
-        if (!event) {
-            addParsedTask(tasks, new Deadline(description, dateTime));
-            return;
+        addParsedTask(tasks, new Deadline(description, dateTime));
+    }
+
+    /** Parses the slash-delimited start and end portions of an event command. */
+    private static void addEvent(TaskList tasks, String command) {
+        int markerIndex = command.indexOf("/from ");
+
+        if (markerIndex < 0) {
+            throw new InvalidEventException("The event is missing /from <start>.");
+        }
+        String description = command.substring(0, markerIndex).trim();
+        if (description.isBlank()) {
+            throw new EmptyDescriptionException("The description of this task cannot be empty.");
+        }
+        String dateTime = command.substring(markerIndex + "/from ".length()).trim();
+        if (dateTime.isBlank()) {
+            throw new InvalidEventException("The event date cannot be empty.");
         }
         int toIndex = dateTime.indexOf("/to ");
         if (toIndex < 0) {
