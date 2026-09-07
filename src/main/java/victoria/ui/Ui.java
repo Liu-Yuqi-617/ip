@@ -89,7 +89,8 @@ public class Ui {
                 + ">> find <keyword>          SEARCH TASK DESCRIPTIONS\n"
                 + ">> mark <number>            COMPLETE TASK\n"
                 + ">> unmark <number>          RESTORE TASK\n"
-                + ">> delete <number>          REMOVE TASK\n\n"
+                + ">> delete <number>          REMOVE TASK\n"
+                + ">> snooze <number> /to <date> (yyyy-MM-dd) RESCHEDULE DEADLINE\n\n"
                 + ">> SYSTEM READY\n";
     }
 

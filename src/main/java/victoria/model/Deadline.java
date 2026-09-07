@@ -11,7 +11,7 @@ import victoria.exception.InvalidDeadlineException;
 public class Deadline extends Task {
     private static final DateTimeFormatter OUTPUT_FORMAT =
             DateTimeFormatter.ofPattern("MMM dd uuuu", Locale.ENGLISH);
-    private final LocalDate by;
+    private LocalDate by;
 
     /** Creates an unfinished deadline. */
     public Deadline(String description, String by) {
@@ -29,6 +29,11 @@ public class Deadline extends Task {
 
     /** Returns the date on which this deadline occurs. */
     public LocalDate getDate() { return by; }
+
+    /** Reschedules this deadline to the supplied ISO-8601 date. */
+    public void reschedule(String newDate) {
+        by = parseDate(newDate);
+    }
 
     /** Parses an ISO date or throws a user-facing deadline error. */
     private static LocalDate parseDate(String value) {

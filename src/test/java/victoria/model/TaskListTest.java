@@ -131,6 +131,17 @@ class TaskListTest {
     }
 
     @Test
+    void deadline_reschedule_updatesDateAndPreservesCompletionStatus() {
+        Deadline deadline = new Deadline("submit report", "2026-08-23");
+        deadline.markDone();
+
+        deadline.reschedule("2026-09-07");
+
+        assertEquals("2026-09-07", deadline.getBy());
+        assertTrue(deadline.isDone());
+    }
+
+    @Test
     void printTasksContaining_keywordIsCaseInsensitiveAndKeepsOriginalNumbers() {
         TaskList tasks = new TaskList(3);
         tasks.add("Read book");

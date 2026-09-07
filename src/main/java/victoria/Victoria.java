@@ -123,6 +123,8 @@ public class Victoria {
                 changeTaskStatus(normalizedCommand, tasks, false);
             } else if (isStatusCommand(normalizedCommand, "delete")) {
                 deleteTask(normalizedCommand, tasks);
+            } else if (normalizedCommand.startsWith("snooze")) {
+                snoozeDeadline(normalizedCommand, tasks);
             } else {
                 throw new InvalidCommandException("I don't recognize that command. Try a standard command format.");
             }
@@ -269,6 +271,28 @@ public class Victoria {
         System.out.println(" Yay! I've removed this task:");
         System.out.println("   " + deletedTask);
         System.out.println(" You now have " + tasks.size() + " tasks. Keep going!");
+    }
+
+    /** Reschedules a deadline selected by its one-based number. */
+    private static void snoozeDeadline(String command, TaskList tasks) {
+        String[] parts = command.split("\\s+/to\\s+", 2);
+        if (parts.length != 2 || !parts[0].matches("snooze\\s+\\d+") || parts[1].isBlank()) {
+            throw new InvalidDeadlineException("Use snooze <number> /to <date> (yyyy-MM-dd).");
+        }
+
+        int taskNumber = Integer.parseInt(parts[0].substring("snooze".length()).trim());
+        Task task = tasks.getTask(taskNumber);
+        if (task == null) {
+            System.out.println(" Oops! Task number is invalid.");
+            return;
+        }
+        if (!(task instanceof Deadline deadline)) {
+            throw new InvalidDeadlineException("Only deadline tasks can be snoozed.");
+        }
+
+        deadline.reschedule(parts[1].trim());
+        System.out.println(" Done! I've rescheduled this deadline:");
+        System.out.println("   " + deadline);
     }
 
 }

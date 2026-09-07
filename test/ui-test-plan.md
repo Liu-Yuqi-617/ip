@@ -367,6 +367,44 @@ Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
 ```
 
+## Snooze a deadline
+
+### Aim
+
+Confirm that `snooze` changes a deadline to the requested date without changing its task number.
+
+### Inputs
+
+```text
+deadline submit report /by 2019-10-15
+snooze 1 /to 2019-10-20
+list
+bye
+```
+
+### Command
+
+```text
+java -cp build/classes/java/main victoria.Victoria --test
+```
+
+### Expected output
+
+```text
+ Got it. I've added this task:
+   [D][ ] submit report (by: Oct 15 2019)
+ Now you have 1 tasks in the list.
+____________________________________________________________
+ Done! I've rescheduled this deadline:
+   [D][ ] submit report (by: Oct 20 2019)
+____________________________________________________________
+ Here are the tasks in your list:
+ 1.[D][ ] submit report (by: Oct 20 2019)
+____________________________________________________________
+Bye! Always nice to chat with you. See you soon!
+____________________________________________________________
+```
+
 ## Reject non-standard input
 
 ### Aim
