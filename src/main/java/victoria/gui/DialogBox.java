@@ -13,9 +13,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 /** Represents one chat message with its speaker image. */
 public class DialogBox extends HBox {
+    private static final double VICTORIA_DIALOG_MAX_WIDTH = 260;
+
     @FXML private Label dialog;
     @FXML private ImageView displayPicture;
 
@@ -33,15 +36,28 @@ public class DialogBox extends HBox {
         displayPicture.setImage(image);
     }
 
-    /** Creates a right-aligned user dialog. */
+    /** Creates a right-aligned command entered by the user. */
     public static DialogBox getUserDialog(String text, Image image) {
-        return new DialogBox(text, image);
+        DialogBox dialogBox = new DialogBox(text, image);
+        dialogBox.dialog.getStyleClass().add("user-command-label");
+        return dialogBox;
     }
 
     /** Creates a left-aligned Victoria dialog. */
     public static DialogBox getVictoriaDialog(String text, Image image) {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
+        dialogBox.dialog.setPrefWidth(VICTORIA_DIALOG_MAX_WIDTH);
+        dialogBox.dialog.setMaxWidth(VICTORIA_DIALOG_MAX_WIDTH);
+        dialogBox.dialog.setMinHeight(Region.USE_PREF_SIZE);
+        dialogBox.dialog.getStyleClass().add("victoria-reply-label");
+        return dialogBox;
+    }
+
+    /** Creates a left-aligned Victoria error reply. */
+    public static DialogBox getErrorDialog(String text, Image image) {
+        DialogBox dialogBox = getVictoriaDialog(text, image);
+        dialogBox.dialog.getStyleClass().add("error-label");
         return dialogBox;
     }
 

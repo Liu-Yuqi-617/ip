@@ -60,6 +60,19 @@ public class Victoria {
         return loadResult;
     }
 
+    /** Returns the startup message that reports the locally restored tasks. */
+    public synchronized String getLoadResultMessage() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        PrintStream originalOutput = System.out;
+        try (PrintStream capturedOutput = new PrintStream(output, true, StandardCharsets.UTF_8)) {
+            System.setOut(capturedOutput);
+            ui.showLoadResult(loadResult, tasks);
+        } finally {
+            System.setOut(originalOutput);
+        }
+        return output.toString(StandardCharsets.UTF_8);
+    }
+
     /** Executes one command and returns the text that should be shown to the user. */
     public synchronized CommandResult executeCommand(String command) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();

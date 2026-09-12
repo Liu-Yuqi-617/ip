@@ -31,6 +31,7 @@ public class MainWindow extends AnchorPane {
     public void setVictoria(Victoria victoria) {
         this.victoria = victoria;
         addVictoriaDialog(Ui.getGreetingMessage());
+        addVictoriaDialog(victoria.getLoadResultMessage().strip());
     }
 
     /** Sends the text field's command and shows Victoria's reply. */
@@ -42,7 +43,7 @@ public class MainWindow extends AnchorPane {
         }
         addUserDialog(input);
         Victoria.CommandResult result = victoria.executeCommand(input);
-        addVictoriaDialog(result.response().strip());
+        addVictoriaDialog(result.response().strip(), result.response().startsWith(" Oops!"));
         userInput.clear();
         if (result.shouldExit()) {
             userInput.setDisable(true);
@@ -57,6 +58,14 @@ public class MainWindow extends AnchorPane {
 
     /** Adds a dialog authored by Victoria. */
     private void addVictoriaDialog(String text) {
-        dialogContainer.getChildren().add(DialogBox.getVictoriaDialog(text, victoriaImage));
+        addVictoriaDialog(text, false);
+    }
+
+    /** Adds a dialog authored by Victoria, highlighting an error reply when needed. */
+    private void addVictoriaDialog(String text, boolean isError) {
+        DialogBox dialogBox = isError
+                ? DialogBox.getErrorDialog(text, victoriaImage)
+                : DialogBox.getVictoriaDialog(text, victoriaImage);
+        dialogContainer.getChildren().add(dialogBox);
     }
 }

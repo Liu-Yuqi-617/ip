@@ -425,3 +425,11 @@ ____________________________________________________________
 Bye! Always nice to chat with you. See you soon!
 ____________________________________________________________
 ```
+
+### Manual GUI verification
+
+Launch the JavaFX application with `gradlew.bat run`, enter `blah`, and press Send. The right-aligned user command
+card should show `blah` with the user avatar. Before commands are entered, Victoria should display the locally restored
+task list. Its left-aligned reply should be a red, bold error card showing `Oops! I don't recognize that command. Try
+a standard command format.` If the restored task list is long, every task should wrap within the reply card and remain
+reachable by scrolling.
