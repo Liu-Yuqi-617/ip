@@ -10,13 +10,13 @@ public class Ui {
 
     /** Prints the startup screen shown during a normal launch. */
     public void showWelcome() {
-        printAnimatedLine("> Initializing VICTORIA...", 10);
-        printAnimatedLine("> Loading task memory...", 10);
-        printAnimatedLine("> Status: ONLINE", 10);
+        printAnimatedLine("> Victoria is warming up...", 10);
+        printAnimatedLine("> Gathering your task list...", 10);
+        printAnimatedLine("> All set—let's make today count!", 10);
         System.out.println();
         printAnimatedLine(getBanner(), 1);
         printSeparator();
-        System.out.println("Anything new today? I'm all ears!");
+        System.out.println("Hi! I'm Victoria, your cheerful task sidekick. What shall we tackle today?");
         printSeparator();
         printCommandFormat();
         printSeparator();
@@ -26,7 +26,7 @@ public class Ui {
     public static String getGreetingMessage() {
         return getBanner()
                 + HORIZONTAL_LINE + "\n"
-                + "Anything new today? I'm all ears!\n"
+                + "Hi! I'm Victoria, your cheerful task sidekick. What shall we tackle today?\n"
                 + HORIZONTAL_LINE + "\n"
                 + getCommandFormat()
                 + HORIZONTAL_LINE;
@@ -36,20 +36,20 @@ public class Ui {
     public void showLoadResult(TaskFile.LoadResult result, TaskList tasks) {
         switch (result.status()) {
         case LOADED:
-            System.out.println("Loaded tasks from disk:");
+            System.out.println("Your saved tasks are back—nice to see them again:");
             tasks.printTasks();
             break;
         case NO_FILE:
-            System.out.println("No saved task file found. Starting with an empty task list.");
+            System.out.println("No saved list yet—perfect, we have a fresh start!");
             break;
         case EMPTY:
-            System.out.println("The saved task file is empty. Starting with an empty task list.");
+            System.out.println("Your saved list is empty, so let's start fresh!");
             break;
         case NO_VALID_RECORDS:
-            System.out.println("No valid tasks found in the saved file. Starting with an empty task list.");
+            System.out.println("I couldn't find usable saved tasks, so let's start with a clean slate!");
             break;
         case ERROR:
-            System.out.println("Could not read the saved task file. Starting with an empty task list.");
+            System.out.println("I couldn't open the saved list, so let's start with a clean slate!");
             break;
         default:
             throw new IllegalStateException("Unknown load status: " + result.status());
@@ -69,7 +69,7 @@ public class Ui {
 
     /** Prints the message shown when the session ends. */
     public void showFarewell() {
-        System.out.println("Bye! Always nice to chat with you. See you soon!");
+        System.out.println("That's all for now—great work today! See you soon!");
         printSeparator();
     }
 
@@ -80,27 +80,23 @@ public class Ui {
 
     /** Returns the command reference shown when Victoria starts. */
     private static String getCommandFormat() {
-        return ">> AVAILABLE COMMANDS\n"
-                + ">> todo <description>       CREATE A TASK\n"
+        return ">> YOUR QUICK COMMAND GUIDE\n"
+                + ">> todo <description>       ADD A TASK\n"
                 + ">> deadline <description> /by <date> (yyyy-MM-dd)\n"
                 + ">> event <description> /from <date> /to <date> (yyyy-MM-dd)\n"
-                + ">> list                     VIEW TASKS\n"
-                + ">> list on <date> (yyyy-MM-dd) VIEW DEADLINES/EVENTS\n"
-                + ">> find <keyword>          SEARCH TASK DESCRIPTIONS\n"
-                + ">> mark <number>            COMPLETE TASK\n"
-                + ">> unmark <number>          RESTORE TASK\n"
-                + ">> delete <number>          REMOVE TASK\n\n"
-                + ">> SYSTEM READY\n";
+                + ">> list                     SEE YOUR TASKS\n"
+                + ">> list on <date> (yyyy-MM-dd) SEE WHAT'S SCHEDULED\n"
+                + ">> find <keyword>          SEARCH YOUR TASKS\n"
+                + ">> mark <number>            CELEBRATE A FINISHED TASK\n"
+                + ">> unmark <number>          PUT A TASK BACK\n"
+                + ">> delete <number>          REMOVE A TASK\n\n"
+                + ">> READY WHEN YOU ARE!\n";
     }
 
     /** Returns Victoria's text banner. */
     private static String getBanner() {
-        return "██╗   ██╗██╗ ██████╗████████╗ ██████╗ ██████╗ ██╗ █████╗ \n"
-                + "██║   ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██║██╔══██╗\n"
-                + "██║   ██║██║██║        ██║   ██║   ██║██████╔╝██║███████║\n"
-                + "╚██╗ ██╔╝██║██║        ██║   ██║   ██║██╔══██╗██║██╔══██║\n"
-                + " ╚████╔╝ ██║╚██████╗   ██║   ╚████╔╝██║  ██║██║██║██║  ██║\n"
-                + "  ╚═══╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝\n";
+        return "[ VICTORIA ]\n"
+                + "Your cheerful task sidekick\n";
     }
 
     /** Prints text one character at a time to create the startup animation. */

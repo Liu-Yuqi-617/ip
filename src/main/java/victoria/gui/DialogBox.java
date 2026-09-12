@@ -17,7 +17,7 @@ import javafx.scene.layout.Region;
 
 /** Represents one chat message with its speaker image. */
 public class DialogBox extends HBox {
-    private static final double VICTORIA_DIALOG_MAX_WIDTH = 260;
+    private static final double VICTORIA_DIALOG_MAX_WIDTH = 340;
 
     @FXML private Label dialog;
     @FXML private ImageView displayPicture;

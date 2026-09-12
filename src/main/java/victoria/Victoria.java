@@ -123,7 +123,7 @@ public class Victoria {
             } else if (normalizedCommand.startsWith("find ")) {
                 findTasks(tasks, normalizedCommand.substring(5).trim());
             } else if (normalizedCommand.equals("todo")) {
-                throw new EmptyDescriptionException("The description of a task cannot be empty.");
+                throw new EmptyDescriptionException("I need a task description to add it to your list.");
             } else if (normalizedCommand.startsWith("todo ")) {
                 addTask(tasks, normalizedCommand.substring(5));
             } else if (normalizedCommand.startsWith("deadline ")) {
@@ -137,7 +137,7 @@ public class Victoria {
             } else if (isStatusCommand(normalizedCommand, "delete")) {
                 deleteTask(normalizedCommand, tasks);
             } else {
-                throw new InvalidCommandException("I don't recognize that command. Try a standard command format.");
+                throw new InvalidCommandException("I didn't catch that command. Try one from the command guide above.");
             }
 
             TaskFile.save(tasks);
@@ -163,14 +163,14 @@ public class Victoria {
         try {
             tasks.printTasksOn(LocalDate.parse(dateText, DateTimeFormatter.ofPattern("uuuu-MM-dd")));
         } catch (DateTimeParseException exception) {
-            throw new InvalidCommandException("The date must use yyyy-MM-dd.");
+            throw new InvalidCommandException("Please use the date format yyyy-MM-dd, for example 2026-09-12.");
         }
     }
 
     /** Validates a search keyword and prints tasks whose descriptions contain it. */
     private static void findTasks(TaskList tasks, String keyword) {
         if (keyword.isBlank()) {
-            throw new InvalidCommandException("The search keyword cannot be empty.");
+            throw new InvalidCommandException("Give me a word or phrase to search for.");
         }
         tasks.printTasksContaining(keyword);
     }
@@ -180,15 +180,15 @@ public class Victoria {
         int markerIndex = command.indexOf("/by ");
 
         if (markerIndex < 0) {
-            throw new InvalidDeadlineException("The deadline is missing /by <date/time>.");
+            throw new InvalidDeadlineException("Add /by <date> so I know when this deadline is due.");
         }
         String description = command.substring(0, markerIndex).trim();
         if (description.isBlank()) {
-            throw new EmptyDescriptionException("The description of this task cannot be empty.");
+            throw new EmptyDescriptionException("I need a task description to add it to your list.");
         }
         String dateTime = command.substring(markerIndex + "/by ".length()).trim();
         if (dateTime.isBlank()) {
-            throw new InvalidDeadlineException("The deadline date/time cannot be empty.");
+            throw new InvalidDeadlineException("Add a date after /by so I can save the deadline.");
         }
         addParsedTask(tasks, new Deadline(description, dateTime));
     }
@@ -198,25 +198,25 @@ public class Victoria {
         int markerIndex = command.indexOf("/from ");
 
         if (markerIndex < 0) {
-            throw new InvalidEventException("The event is missing /from <start>.");
+            throw new InvalidEventException("Add /from <start date> so I know when the event begins.");
         }
         String description = command.substring(0, markerIndex).trim();
         if (description.isBlank()) {
-            throw new EmptyDescriptionException("The description of this task cannot be empty.");
+            throw new EmptyDescriptionException("I need a task description to add it to your list.");
         }
         String dateTime = command.substring(markerIndex + "/from ".length()).trim();
         if (dateTime.isBlank()) {
-            throw new InvalidEventException("The event date cannot be empty.");
+            throw new InvalidEventException("Add a start date after /from to save the event.");
         }
         int toIndex = dateTime.indexOf("/to ");
         if (toIndex < 0) {
-            throw new InvalidEventException("The event is missing /to <end>.");
+            throw new InvalidEventException("Add /to <end date> so I know when the event finishes.");
         }
         if (dateTime.substring(0, toIndex).trim().isBlank()) {
-            throw new InvalidEventException("The event start time after /from cannot be empty.");
+            throw new InvalidEventException("Add a start date after /from to save the event.");
         }
         if (dateTime.substring(toIndex + 4).trim().isBlank()) {
-            throw new InvalidEventException("The event end time after /to cannot be empty.");
+            throw new InvalidEventException("Add an end date after /to to save the event.");
         }
         addParsedTask(tasks, new Event(description, dateTime.substring(0, toIndex).trim(),
                 dateTime.substring(toIndex + 4).trim()));
@@ -226,14 +226,15 @@ public class Victoria {
     private static void addParsedTask(TaskList tasks, Task task) {
 
         if (task.getDescription() == null || task.getDescription().isBlank()) {
-            throw new EmptyDescriptionException("The description of a task cannot be empty.");
+            throw new EmptyDescriptionException("I need a task description to add it to your list.");
         }
         if (tasks.add(task)) {
-            System.out.println(" Got it. I've added this task:");
+            System.out.println(" Nice! I've added this to your list:");
             System.out.println("   " + task);
-            System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+            String taskCountLabel = tasks.size() == 1 ? "task" : "tasks";
+            System.out.println(" Your list now has " + tasks.size() + " " + taskCountLabel + ". You're on a roll!");
         } else {
-            throw new TaskListFullException("The task list is full.");
+            throw new TaskListFullException("Your task list is full—time to celebrate some completed tasks!");
         }
     }
 
@@ -250,25 +251,25 @@ public class Victoria {
         int taskNumber = Integer.parseInt(command.substring(commandName.length()).trim());
         Task task = tasks.getTask(taskNumber);
         if (task == null) {
-                System.out.println(" Oops! Task number is invalid.");
-            } else if (done && task.isDone()) {
-                System.out.println(" Hurray! This task is already done:");
-                System.out.println("   " + task);
-                System.out.println(" Go for other tasks!");
-            } else if (!done && !task.isDone()) {
-                System.out.println(" This task is already marked as not done:");
-                System.out.println("   " + task);
-                System.out.println(" Keep up! You can do this!");
-            } else if (done) {
-                tasks.markDone(taskNumber);
-                System.out.println(" Nice! I've marked this task as done:");
-                System.out.println("   " + task);
-            } else {
-                tasks.markNotDone(taskNumber);
-                System.out.println(" OK, I've marked this task as not done yet:");
-                System.out.println("   " + task);
-                System.out.println(" Keep up! You can do this!");
-            }
+            System.out.println(" Whoops! I can't find a task with that number.");
+        } else if (done && task.isDone()) {
+            System.out.println(" Hooray! You already finished this one:");
+            System.out.println("   " + task);
+            System.out.println("Pick another task whenever you're ready!");
+        } else if (!done && !task.isDone()) {
+            System.out.println(" This task is already waiting for you:");
+            System.out.println("   " + task);
+            System.out.println("You've got this!");
+        } else if (done) {
+            tasks.markDone(taskNumber);
+            System.out.println(" Amazing! I've marked this task as done:");
+            System.out.println("   " + task);
+        } else {
+            tasks.markNotDone(taskNumber);
+            System.out.println(" No problem—I've marked this task as not done:");
+            System.out.println("   " + task);
+            System.out.println("You've got this!");
+        }
     }
 
     /** Deletes a task selected by its one-based number and reports the new list size. */
@@ -276,12 +277,13 @@ public class Victoria {
         int taskNumber = Integer.parseInt(command.substring("delete ".length()).trim());
         Task deletedTask = tasks.delete(taskNumber);
         if (deletedTask == null) {
-            System.out.println(" Oops! Task number is invalid.");
+            System.out.println(" Whoops! I can't find a task with that number.");
             return;
         }
-        System.out.println(" Yay! I've removed this task:");
+        System.out.println(" Done! I've removed this task:");
         System.out.println("   " + deletedTask);
-        System.out.println(" You now have " + tasks.size() + " tasks. Keep going!");
+        String taskCountLabel = tasks.size() == 1 ? "task" : "tasks";
+        System.out.println(" You now have " + tasks.size() + " " + taskCountLabel + " left. Keep it up!");
     }
 
 }

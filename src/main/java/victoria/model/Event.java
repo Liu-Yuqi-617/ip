@@ -36,7 +36,7 @@ public class Event extends Task {
         try {
             return LocalDate.parse(value, DateTimeFormatter.ofPattern("uuuu-MM-dd"));
         } catch (DateTimeParseException | NullPointerException exception) {
-            throw new InvalidEventException("Event dates must use yyyy-MM-dd.");
+            throw new InvalidEventException("Please use yyyy-MM-dd for event dates, for example 2026-09-12.");
         }
     }
 

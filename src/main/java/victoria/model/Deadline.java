@@ -35,7 +35,7 @@ public class Deadline extends Task {
         try {
             return LocalDate.parse(value, DateTimeFormatter.ofPattern("uuuu-MM-dd"));
         } catch (DateTimeParseException | NullPointerException exception) {
-            throw new InvalidDeadlineException("The deadline must use yyyy-MM-dd.");
+            throw new InvalidDeadlineException("Please use yyyy-MM-dd for the deadline date, for example 2026-09-12.");
         }
     }
 

@@ -76,10 +76,10 @@ public class TaskList {
     /** Prints all stored tasks using one-based numbering. */
     public void printTasks() {
         if (tasks.isEmpty()) {
-            System.out.println(" There are no tasks in your list.");
+            System.out.println(" Your list is clear—enjoy the breathing room!");
             return;
         }
-        System.out.println(" Here are the tasks in your list:");
+        System.out.println(" Here is your game plan:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(" " + (i + 1) + "." + tasks.get(i));
         }
@@ -95,14 +95,14 @@ public class TaskList {
                     && !date.isBefore(event.getStartDate()) && !date.isAfter(event.getEndDate());
             if (occursOnDate) {
                 if (matchingTaskNumber == 0) {
-                    System.out.println(" Here are the tasks occurring on " + date + ":");
+                    System.out.println(" Here is what's happening on " + date + ":");
                 }
                 matchingTaskNumber++;
                 System.out.println(" " + (i + 1) + "." + task);
             }
         }
         if (matchingTaskNumber == 0) {
-            System.out.println(" There are no deadlines or events on " + date + ".");
+            System.out.println(" Nothing is scheduled for " + date + ". A free day—lovely!");
         }
     }
 
@@ -113,14 +113,14 @@ public class TaskList {
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
                 if (matchingTaskCount == 0) {
-                    System.out.println(" Here are the matching tasks in your list:");
+                    System.out.println(" I found these matching tasks:");
                 }
                 matchingTaskCount++;
                 System.out.println(" " + (i + 1) + "." + tasks.get(i));
             }
         }
         if (matchingTaskCount == 0) {
-            System.out.println(" There are no matching tasks in your list.");
+            System.out.println(" No matching tasks yet. Try another keyword!");
         }
     }
 
