@@ -97,7 +97,7 @@ class TaskListTest {
     void printTasks_emptyAndNonEmptyList_printsExpectedOutput() {
         TaskList tasks = new TaskList(2);
         tasks.printTasks();
-        assertTrue(output.toString().contains("There are no tasks"));
+        assertTrue(output.toString().contains("Your list is clear"));
 
         output.reset();
         tasks.add("First");
@@ -127,7 +127,7 @@ class TaskListTest {
 
         tasks.printTasksOn(LocalDate.of(2026, 8, 24));
 
-        assertTrue(output.toString().contains("There are no deadlines or events"));
+        assertTrue(output.toString().contains("Nothing is scheduled for 2026-08-24"));
     }
 
     @Test
@@ -140,7 +140,7 @@ class TaskListTest {
         tasks.printTasksContaining("book");
 
         String printed = output.toString();
-        assertTrue(printed.contains("Here are the matching tasks in your list:"));
+        assertTrue(printed.contains("I found these matching tasks:"));
         assertTrue(printed.contains("1.[T][ ] Read book"));
         assertTrue(printed.contains("3.[T][ ] Return BOOK"));
         assertFalse(printed.contains("2.[T][ ] Buy milk"));
@@ -153,6 +153,6 @@ class TaskListTest {
 
         tasks.printTasksContaining("book");
 
-        assertTrue(output.toString().contains("There are no matching tasks in your list."));
+        assertTrue(output.toString().contains("No matching tasks yet"));
     }
 }

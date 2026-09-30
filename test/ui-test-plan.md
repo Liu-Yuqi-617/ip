@@ -29,14 +29,14 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [T][ ] borrow book
- Now you have 1 tasks in the list.
+ Your list now has 1 task. You're on a roll!
 ____________________________________________________________
- Here are the tasks in your list:
+ Here is your game plan:
  1.[T][ ] borrow book
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -59,29 +59,29 @@ bye
 ### Command
 
 ```text
-java -cp out Victoria --test
+java -cp build/classes/java/main victoria.Victoria --test
 ```
 
 ### Expected output
 
 ```text
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [T][ ] read book
- Now you have 1 tasks in the list.
+ Your list now has 1 task. You're on a roll!
 ____________________________________________________________
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [D][ ] return book (by: Jun 06 2019)
- Now you have 2 tasks in the list.
+ Your list now has 2 tasks. You're on a roll!
 ____________________________________________________________
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [T][ ] buy milk
- Now you have 3 tasks in the list.
+ Your list now has 3 tasks. You're on a roll!
 ____________________________________________________________
- Here are the matching tasks in your list:
+ I found these matching tasks:
  1.[T][ ] read book
  2.[D][ ] return book (by: Jun 06 2019)
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -111,17 +111,17 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Oops! The description of this task cannot be empty.
+ Oops! I need a task description to add it to your list.
 ____________________________________________________________
- Oops! The deadline is missing /by <date/time>.
+ Oops! Add /by <date> so I know when this deadline is due.
 ____________________________________________________________
- Oops! The description of this task cannot be empty.
+ Oops! I need a task description to add it to your list.
 ____________________________________________________________
- Oops! The event is missing /to <end>.
+ Oops! Add /to <end date> so I know when the event finishes.
 ____________________________________________________________
- Oops! The event start time after /from cannot be empty.
+ Oops! Add a start date after /from to save the event.
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -147,10 +147,10 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Here are the tasks in your list:
+ Here is your game plan:
  1.[T][X] persistent task
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -180,27 +180,27 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [T][ ] buy milk
- Now you have 1 tasks in the list.
+ Your list now has 1 task. You're on a roll!
 ____________________________________________________________
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
- Now you have 2 tasks in the list.
+ Your list now has 2 tasks. You're on a roll!
 ____________________________________________________________
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [T][ ] submit report
- Now you have 3 tasks in the list.
+ Your list now has 3 tasks. You're on a roll!
 ____________________________________________________________
- Yay! I've removed this task:
+ Done! I've removed this task:
    [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
- You now have 2 tasks. Keep going!
+ You now have 2 tasks left. Keep it up!
 ____________________________________________________________
- Here are the tasks in your list:
+ Here is your game plan:
  1.[T][ ] buy milk
  2.[T][ ] submit report
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -226,10 +226,10 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Here are the tasks in your list:
+ Here is your game plan:
  1.[T][ ] valid tasks
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -255,9 +255,9 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- There are no tasks in your list.
+ Your list is clear—enjoy the breathing room!
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -284,11 +284,11 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Oops! I don't recognize that command. Try a standard command format.
+ Oops! I didn't catch that command. Try one from the command guide above.
 ____________________________________________________________
- Oops! I don't recognize that command. Try a standard command format.
+ Oops! I didn't catch that command. Try one from the command guide above.
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -315,15 +315,15 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [D][ ] return book (by: Dec 02 2019)
- Now you have 1 tasks in the list.
+ Your list now has 1 task. You're on a roll!
 ____________________________________________________________
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [E][ ] project meeting (from: Aug 06 2019 to: Aug 06 2019)
- Now you have 2 tasks in the list.
+ Your list now has 2 tasks. You're on a roll!
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -351,19 +351,19 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [D][ ] submit report (by: Oct 15 2019)
- Now you have 1 tasks in the list.
+ Your list now has 1 task. You're on a roll!
 ____________________________________________________________
- Got it. I've added this task:
+ Nice! I've added this to your list:
    [E][ ] project meeting (from: Oct 14 2019 to: Oct 16 2019)
- Now you have 2 tasks in the list.
+ Your list now has 2 tasks. You're on a roll!
 ____________________________________________________________
- Here are the tasks occurring on 2019-10-15:
+ Here is what's happening on 2019-10-15:
  1.[D][ ] submit report (by: Oct 15 2019)
  2.[E][ ] project meeting (from: Oct 14 2019 to: Oct 16 2019)
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -389,9 +389,9 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Oops! I don't recognize that command. Try a standard command format.
+ Oops! I didn't catch that command. Try one from the command guide above.
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
@@ -418,11 +418,11 @@ java -cp build/classes/java/main victoria.Victoria --test
 ### Expected output
 
 ```text
- Oops! The description of a task cannot be empty.
+ Oops! I need a task description to add it to your list.
 ____________________________________________________________
- Oops! I don't recognize that command. Try a standard command format.
+ Oops! I didn't catch that command. Try one from the command guide above.
 ____________________________________________________________
-Bye! Always nice to chat with you. See you soon!
+That's all for now—great work today! See you soon!
 ____________________________________________________________
 ```
 
